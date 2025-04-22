@@ -1,0 +1,296 @@
+./A.c: ../netpyne-course-2021/A.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "A.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./A.o: ./A.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./AMPA.c: ../netpyne-course-2021/AMPA.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "AMPA.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./AMPA.o: ./AMPA.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./ElectSyn.c: ../netpyne-course-2021/ElectSyn.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "ElectSyn.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./ElectSyn.o: ./ElectSyn.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./GABAa.c: ../netpyne-course-2021/GABAa.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "GABAa.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./GABAa.o: ./GABAa.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./MyExp2SynBB.c: ../netpyne-course-2021/MyExp2SynBB.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "MyExp2SynBB.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./MyExp2SynBB.o: ./MyExp2SynBB.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./MyExp2SynNMDABB.c: ../netpyne-course-2021/MyExp2SynNMDABB.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "MyExp2SynNMDABB.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./MyExp2SynNMDABB.o: ./MyExp2SynNMDABB.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./NMDA.c: ../netpyne-course-2021/NMDA.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "NMDA.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./NMDA.o: ./NMDA.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./Nca.c: ../netpyne-course-2021/Nca.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "Nca.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./Nca.o: ./Nca.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./OFThpo.c: ../netpyne-course-2021/OFThpo.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "OFThpo.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./OFThpo.o: ./OFThpo.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./OFThresh.c: ../netpyne-course-2021/OFThresh.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "OFThresh.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./OFThresh.o: ./OFThresh.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./ar.c: ../netpyne-course-2021/ar.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "ar.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./ar.o: ./ar.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./cad.c: ../netpyne-course-2021/cad.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "cad.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./cad.o: ./cad.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./cadad.c: ../netpyne-course-2021/cadad.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "cadad.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./cadad.o: ./cadad.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./cal.c: ../netpyne-course-2021/cal.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "cal.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./cal.o: ./cal.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./cat.c: ../netpyne-course-2021/cat.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "cat.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./cat.o: ./cat.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./expsynstdp.c: ../netpyne-course-2021/expsynstdp.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "expsynstdp.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./expsynstdp.o: ./expsynstdp.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./iholmw.c: ../netpyne-course-2021/iholmw.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "iholmw.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./iholmw.o: ./iholmw.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./izhi2003a.c: ../netpyne-course-2021/izhi2003a.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "izhi2003a.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./izhi2003a.o: ./izhi2003a.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./izhi2003b.c: ../netpyne-course-2021/izhi2003b.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "izhi2003b.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./izhi2003b.o: ./izhi2003b.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./izhi2007a.c: ../netpyne-course-2021/izhi2007a.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "izhi2007a.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./izhi2007a.o: ./izhi2007a.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./izhi2007b.c: ../netpyne-course-2021/izhi2007b.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "izhi2007b.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./izhi2007b.o: ./izhi2007b.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./k2.c: ../netpyne-course-2021/k2.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "k2.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./k2.o: ./k2.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./ka.c: ../netpyne-course-2021/ka.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "ka.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./ka.o: ./ka.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./kacurrent.c: ../netpyne-course-2021/kacurrent.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "kacurrent.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./kacurrent.o: ./kacurrent.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./kahp.c: ../netpyne-course-2021/kahp.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "kahp.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./kahp.o: ./kahp.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./kc.c: ../netpyne-course-2021/kc.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "kc.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./kc.o: ./kc.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./kca.c: ../netpyne-course-2021/kca.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "kca.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./kca.o: ./kca.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./kdr.c: ../netpyne-course-2021/kdr.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "kdr.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./kdr.o: ./kdr.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./kdrcurrent.c: ../netpyne-course-2021/kdrcurrent.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "kdrcurrent.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./kdrcurrent.o: ./kdrcurrent.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./km.c: ../netpyne-course-2021/km.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "km.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./km.o: ./km.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./km2.c: ../netpyne-course-2021/km2.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "km2.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./km2.o: ./km2.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./kv.c: ../netpyne-course-2021/kv.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "kv.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./kv.o: ./kv.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./nacurrent.c: ../netpyne-course-2021/nacurrent.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "nacurrent.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./nacurrent.o: ./nacurrent.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./naf.c: ../netpyne-course-2021/naf.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "naf.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./naf.o: ./naf.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./nap.c: ../netpyne-course-2021/nap.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "nap.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./nap.o: ./nap.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./naz.c: ../netpyne-course-2021/naz.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "naz.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./naz.o: ./naz.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
+./vecevent.c: ../netpyne-course-2021/vecevent.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "../netpyne-course-2021";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "vecevent.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
+
+./vecevent.o: ./vecevent.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I"../netpyne-course-2021" $(INCLUDES) -fPIC -c $< -o $@
+
