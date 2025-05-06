@@ -253,7 +253,6 @@ static void _net_receive (Point_process* _pnt, double* _args, double _lflag)
  _tsav = t; {
    if ( _lflag  == 0.0 ) {
      post_trace = post_trace * exp ( - ( t - last_post_spike ) / tau ) ;
-     printf ( "floag 0" ) ;
      if ( post_trace < target_rate ) {
        weight = weight + eta * ( target_rate - post_trace ) ;
        if ( weight > max_weight ) {
@@ -428,8 +427,7 @@ static const char* nmodl_file_text =
   "    if (flag == 0) {\n"
   "        : Presynaptic spike\n"
   "        post_trace = post_trace * exp(-(t - last_post_spike)/tau)\n"
-  "        printf(\"floag 0\")\n"
-  "\n"
+  "        \n"
   "        if (post_trace < target_rate) {\n"
   "            weight = weight + eta * (target_rate - post_trace)\n"
   "            if (weight > max_weight) {\n"

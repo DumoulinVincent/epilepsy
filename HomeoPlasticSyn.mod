@@ -33,8 +33,7 @@ NET_RECEIVE (w) {
     if (flag == 0) {
         : Presynaptic spike
         post_trace = post_trace * exp(-(t - last_post_spike)/tau)
-        printf("floag 0")
-
+        
         if (post_trace < target_rate) {
             weight = weight + eta * (target_rate - post_trace)
             if (weight > max_weight) {
