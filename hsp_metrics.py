@@ -450,7 +450,7 @@ def run_trajectory_capture(net, alpha=1.0, run_time=None, analysis_start_s=2000.
     elif not hasattr(input_freq, "dimensions"):
         input_freq = input_freq * Hz
 
-    net.restore('baseline')
+    net.restore('baseline', filename='baseline_2hz.bri')
     inp = net['inp']
     inp.rates = input_freq
     P_E = net['P_E']

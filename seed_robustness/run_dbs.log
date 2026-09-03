@@ -1,0 +1,328 @@
+network seeds : [1, 2, 3]
+conditions    : ['untreated', 'DBS 5pA', 'DBS 10pA', 'DBS 20pA', 'DBS 25pA', 'DBS 30pA', 'DBS 40pA']
+grid          : COARSE  (probe_seeds=4, n_steps=800, max_delay=15)
+n_jobs        : 14  (of 16 available cores, leaving 2 free)
+out_dir       : /home/vincent/bmnn/epilepsy/seed_robustness/results
+[prewarm] using cached compiled extensions in /home/vincent/bmnn/epilepsy/seed_robustness/results/cython_cache/_template
+[calibrate] seed 1: using cached /home/vincent/bmnn/epilepsy/seed_robustness/results/baselines/seed1.bri
+[calibrate] seed 2: using cached /home/vincent/bmnn/epilepsy/seed_robustness/results/baselines/seed2.bri
+[calibrate] seed 3: using cached /home/vincent/bmnn/epilepsy/seed_robustness/results/baselines/seed3.bri
+[run] seed 1 / untreated: using cached /home/vincent/bmnn/epilepsy/seed_robustness/results/raw/seed1_untreated.json
+[run] seed 2 / untreated: using cached /home/vincent/bmnn/epilepsy/seed_robustness/results/raw/seed2_untreated.json
+[run] seed 3 / untreated: using cached /home/vincent/bmnn/epilepsy/seed_robustness/results/raw/seed3_untreated.json
+[run] running 18 (seed, condition) job(s), 14 at a time...
+[Parallel(n_jobs=14)]: Using backend LokyBackend with 14 concurrent workers.
+INFO       Cache size for target 'cython': 2361 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2361 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2361 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2361 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2361 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2361 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2361 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2361 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2361 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2361 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2361 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2361 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2361 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2361 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+[seed1/DBS 25pA] starting
+[seed1/DBS 5pA] starting
+[seed1/DBS 10pA] starting
+[seed1/DBS 20pA] starting
+[seed1/DBS 30pA] starting
+[seed1/DBS 40pA] starting
+[seed2/DBS 10pA] starting
+[seed2/DBS 5pA] starting
+[seed2/DBS 20pA] starting
+[seed2/DBS 30pA] starting
+[seed2/DBS 40pA] starting
+[seed2/DBS 25pA] starting
+[seed3/DBS 5pA] starting
+[seed3/DBS 10pA] starting
+[seed2/DBS 5pA/36Hz] characterizing cycle ...
+[seed2/DBS 30pA/36Hz] characterizing cycle ...
+[seed1/DBS 30pA/36Hz] characterizing cycle ...
+[seed2/DBS 10pA/36Hz] characterizing cycle ...
+[seed1/DBS 40pA/36Hz] characterizing cycle ...
+[seed1/DBS 10pA/36Hz] characterizing cycle ...
+[seed2/DBS 20pA/36Hz] characterizing cycle ...
+[seed1/DBS 20pA/36Hz] characterizing cycle ...
+[seed1/DBS 25pA/36Hz] characterizing cycle ...
+[seed1/DBS 5pA/36Hz] characterizing cycle ...
+[seed3/DBS 5pA/36Hz] characterizing cycle ...
+[seed2/DBS 25pA/36Hz] characterizing cycle ...
+[seed3/DBS 10pA/36Hz] characterizing cycle ...
+[seed2/DBS 40pA/36Hz] characterizing cycle ...
+[seed2/DBS 5pA/36Hz] characterizing cycle: done in 282.6s wall
+[seed2/DBS 5pA/36Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed3/DBS 5pA/36Hz] characterizing cycle: done in 282.5s wall
+[seed3/DBS 5pA/36Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed2/DBS 30pA/36Hz] characterizing cycle: done in 284.3s wall
+[seed2/DBS 30pA/36Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed1/DBS 40pA/36Hz] characterizing cycle: done in 287.1s wall
+[seed1/DBS 40pA/36Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed1/DBS 30pA/36Hz] characterizing cycle: done in 289.7s wall
+[seed1/DBS 30pA/36Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed1/DBS 10pA/36Hz] characterizing cycle: done in 291.2s wall
+[seed1/DBS 10pA/36Hz/post_ictal] scanning for snapshot (budget 2000s sim) ...
+[seed2/DBS 10pA/36Hz] characterizing cycle: done in 297.2s wall
+[seed2/DBS 10pA/36Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed2/DBS 40pA/36Hz] characterizing cycle: done in 306.8s wall
+[seed2/DBS 40pA/36Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed1/DBS 5pA/36Hz] characterizing cycle: done in 313.9s wall
+[seed1/DBS 5pA/36Hz/post_ictal] scanning for snapshot (budget 2000s sim) ...
+[seed1/DBS 25pA/36Hz] characterizing cycle: done in 315.3s wall
+[seed1/DBS 25pA/36Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed3/DBS 10pA/36Hz] characterizing cycle: done in 315.6s wall
+[seed3/DBS 10pA/36Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed1/DBS 20pA/36Hz] characterizing cycle: done in 317.2s wall
+[seed1/DBS 20pA/36Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed2/DBS 20pA/36Hz] characterizing cycle: done in 317.5s wall
+[seed2/DBS 20pA/36Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed2/DBS 25pA/36Hz] characterizing cycle: done in 325.5s wall
+[seed2/DBS 25pA/36Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed3/DBS 5pA/36Hz/steady] scanning for snapshot (budget 2000s sim): done in 160.9s wall
+[seed3/DBS 5pA/36Hz/steady] probing 4 seed(s) ...
+[seed2/DBS 5pA/36Hz/steady] scanning for snapshot (budget 2000s sim): done in 167.2s wall
+[seed2/DBS 5pA/36Hz/steady] probing 4 seed(s) ...
+[seed2/DBS 30pA/36Hz/steady] scanning for snapshot (budget 2000s sim): done in 190.9s wall
+[seed2/DBS 30pA/36Hz/steady] probing 4 seed(s) ...
+[seed1/DBS 40pA/36Hz/steady] scanning for snapshot (budget 2000s sim): done in 193.5s wall
+[seed1/DBS 40pA/36Hz/steady] probing 4 seed(s) ...
+[seed1/DBS 30pA/36Hz/steady] scanning for snapshot (budget 2000s sim): done in 191.2s wall
+[seed1/DBS 30pA/36Hz/steady] probing 4 seed(s) ...
+[seed2/DBS 10pA/36Hz/steady] scanning for snapshot (budget 2000s sim): done in 188.9s wall
+[seed2/DBS 10pA/36Hz/steady] probing 4 seed(s) ...
+[seed3/DBS 10pA/36Hz/steady] scanning for snapshot (budget 2000s sim): done in 183.5s wall
+[seed3/DBS 10pA/36Hz/steady] probing 4 seed(s) ...
+[seed2/DBS 20pA/36Hz/steady] scanning for snapshot (budget 2000s sim): done in 182.4s wall
+[seed2/DBS 20pA/36Hz/steady] probing 4 seed(s) ...
+[seed1/DBS 20pA/36Hz/steady] scanning for snapshot (budget 2000s sim): done in 196.3s wall
+[seed1/DBS 20pA/36Hz/steady] probing 4 seed(s) ...
+[seed1/DBS 25pA/36Hz/steady] scanning for snapshot (budget 2000s sim): done in 200.7s wall
+[seed1/DBS 25pA/36Hz/steady] probing 4 seed(s) ...
+[seed2/DBS 40pA/36Hz/steady] scanning for snapshot (budget 2000s sim): done in 212.8s wall
+[seed2/DBS 40pA/36Hz/steady] probing 4 seed(s) ...
+[seed2/DBS 25pA/36Hz/steady] scanning for snapshot (budget 2000s sim): done in 199.2s wall
+[seed2/DBS 25pA/36Hz/steady] probing 4 seed(s) ...
+[seed1/DBS 5pA/36Hz/post_ictal] scanning for snapshot (budget 2000s sim): done in 279.8s wall
+[seed1/DBS 5pA/36Hz/post_ictal] probing 4 seed(s) ...
+[seed1/DBS 10pA/36Hz/post_ictal] scanning for snapshot (budget 2000s sim): done in 509.3s wall
+[seed1/DBS 10pA/36Hz/mid] scanning for snapshot (budget 2000s sim) ...
+[seed3/DBS 5pA/36Hz/steady] probing 4 seed(s): done in 748.0s wall
+[seed3/DBS 5pA/40Hz] characterizing cycle ...
+[seed2/DBS 5pA/36Hz/steady] probing 4 seed(s): done in 757.4s wall
+[seed2/DBS 5pA/40Hz] characterizing cycle ...
+[seed1/DBS 10pA/36Hz/mid] scanning for snapshot (budget 2000s sim): done in 430.7s wall
+[seed1/DBS 10pA/36Hz/pre_ictal] scanning for snapshot (budget 2000s sim) ...
+[seed1/DBS 40pA/36Hz/steady] probing 4 seed(s): done in 755.8s wall
+[seed1/DBS 40pA/40Hz] characterizing cycle ...
+[seed2/DBS 30pA/36Hz/steady] probing 4 seed(s): done in 763.9s wall
+[seed2/DBS 30pA/40Hz] characterizing cycle ...
+[seed1/DBS 30pA/36Hz/steady] probing 4 seed(s): done in 759.5s wall
+[seed1/DBS 30pA/40Hz] characterizing cycle ...
+[seed2/DBS 10pA/36Hz/steady] probing 4 seed(s): done in 772.1s wall
+[seed2/DBS 10pA/40Hz] characterizing cycle ...
+[seed1/DBS 25pA/36Hz/steady] probing 4 seed(s): done in 742.9s wall
+[seed1/DBS 25pA/40Hz] characterizing cycle ...
+[seed1/DBS 20pA/36Hz/steady] probing 4 seed(s): done in 750.2s wall
+[seed1/DBS 20pA/40Hz] characterizing cycle ...
+[seed2/DBS 20pA/36Hz/steady] probing 4 seed(s): done in 770.3s wall
+[seed2/DBS 20pA/40Hz] characterizing cycle ...
+[seed2/DBS 25pA/36Hz/steady] probing 4 seed(s): done in 748.9s wall
+[seed2/DBS 25pA/40Hz] characterizing cycle ...
+[seed2/DBS 40pA/36Hz/steady] probing 4 seed(s): done in 758.9s wall
+[seed2/DBS 40pA/40Hz] characterizing cycle ...
+[seed3/DBS 10pA/36Hz/steady] probing 4 seed(s): done in 779.9s wall
+[seed3/DBS 10pA/40Hz] characterizing cycle ...
+[seed1/DBS 5pA/36Hz/post_ictal] probing 4 seed(s): done in 742.8s wall
+[seed1/DBS 5pA/36Hz/mid] scanning for snapshot (budget 2000s sim) ...
+[seed3/DBS 5pA/40Hz] characterizing cycle: done in 289.8s wall
+[seed3/DBS 5pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed2/DBS 5pA/40Hz] characterizing cycle: done in 289.7s wall
+[seed2/DBS 5pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed2/DBS 30pA/40Hz] characterizing cycle: done in 288.4s wall
+[seed2/DBS 30pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed1/DBS 40pA/40Hz] characterizing cycle: done in 291.2s wall
+[seed1/DBS 40pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed1/DBS 30pA/40Hz] characterizing cycle: done in 292.4s wall
+[seed1/DBS 30pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed1/DBS 25pA/40Hz] characterizing cycle: done in 288.1s wall
+[seed1/DBS 25pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed2/DBS 10pA/40Hz] characterizing cycle: done in 295.9s wall
+[seed2/DBS 10pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed1/DBS 20pA/40Hz] characterizing cycle: done in 292.6s wall
+[seed1/DBS 20pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed2/DBS 20pA/40Hz] characterizing cycle: done in 296.1s wall
+[seed2/DBS 20pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed2/DBS 25pA/40Hz] characterizing cycle: done in 296.2s wall
+[seed2/DBS 25pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed2/DBS 40pA/40Hz] characterizing cycle: done in 293.7s wall
+[seed2/DBS 40pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed3/DBS 10pA/40Hz] characterizing cycle: done in 297.1s wall
+[seed3/DBS 10pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed1/DBS 5pA/36Hz/mid] scanning for snapshot (budget 2000s sim): done in 339.0s wall
+[seed1/DBS 5pA/36Hz/mid] probing 4 seed(s) ...
+[seed1/DBS 10pA/36Hz/pre_ictal] scanning for snapshot (budget 2000s sim): done in 445.3s wall
+[seed1/DBS 10pA/40Hz] characterizing cycle ...
+[seed3/DBS 5pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 469.1s wall
+[seed3/DBS 5pA] done (ipc_ref=0.075)
+[seed3/DBS 20pA] starting
+[seed2/DBS 5pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 475.2s wall
+[seed2/DBS 5pA] done (ipc_ref=0.074)
+[seed3/DBS 25pA] starting
+[seed3/DBS 20pA/36Hz] characterizing cycle ...
+[seed1/DBS 30pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 458.3s wall
+[seed1/DBS 30pA] done (ipc_ref=0.134)
+[Parallel(n_jobs=14)]: Done   3 out of  18 | elapsed: 33.8min remaining: 169.0min
+[seed3/DBS 30pA] starting
+[seed2/DBS 30pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 464.6s wall
+[seed2/DBS 30pA] done (ipc_ref=0.149)
+[seed3/DBS 40pA] starting
+[seed1/DBS 10pA/40Hz] characterizing cycle: done in 316.1s wall
+[seed1/DBS 10pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed1/DBS 40pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 469.9s wall
+[seed1/DBS 40pA] done (ipc_ref=0.135)
+[Parallel(n_jobs=14)]: Done   5 out of  18 | elapsed: 33.9min remaining: 88.1min
+[seed2/DBS 10pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 454.0s wall
+[seed2/DBS 10pA] done (ipc_ref=0.092)
+[seed3/DBS 25pA/36Hz] characterizing cycle ...
+[seed1/DBS 25pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 466.9s wall
+[seed1/DBS 25pA] done (ipc_ref=0.143)
+[Parallel(n_jobs=14)]: Done   7 out of  18 | elapsed: 34.2min remaining: 53.7min
+[seed1/DBS 20pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 465.1s wall
+[seed1/DBS 20pA] done (ipc_ref=0.137)
+[seed3/DBS 30pA/36Hz] characterizing cycle ...
+[seed3/DBS 40pA/36Hz] characterizing cycle ...
+[seed2/DBS 20pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 463.4s wall
+[seed2/DBS 20pA] done (ipc_ref=0.162)
+[Parallel(n_jobs=14)]: Done   9 out of  18 | elapsed: 34.4min remaining: 34.4min
+[seed3/DBS 10pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 461.0s wall
+[seed3/DBS 10pA] done (ipc_ref=0.069)
+[seed2/DBS 40pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 465.7s wall
+[seed2/DBS 25pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 468.6s wall
+[seed2/DBS 40pA] done (ipc_ref=0.154)
+[Parallel(n_jobs=14)]: Done  11 out of  18 | elapsed: 34.6min remaining: 22.0min
+[seed2/DBS 25pA] done (ipc_ref=0.161)
+[seed3/DBS 20pA/36Hz] characterizing cycle: done in 178.0s wall
+[seed3/DBS 20pA/36Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed3/DBS 25pA/36Hz] characterizing cycle: done in 170.7s wall
+[seed3/DBS 25pA/36Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed3/DBS 30pA/36Hz] characterizing cycle: done in 165.8s wall
+[seed3/DBS 30pA/36Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed3/DBS 40pA/36Hz] characterizing cycle: done in 165.5s wall
+[seed3/DBS 40pA/36Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed1/DBS 10pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 261.8s wall
+[seed1/DBS 10pA] done (ipc_ref=nan)
+[Parallel(n_jobs=14)]: Done  13 out of  18 | elapsed: 38.2min remaining: 14.7min
+[seed3/DBS 20pA/36Hz/steady] scanning for snapshot (budget 2000s sim): done in 93.6s wall
+[seed3/DBS 20pA/36Hz/steady] probing 4 seed(s) ...
+[seed1/DBS 5pA/36Hz/mid] probing 4 seed(s): done in 601.2s wall
+[seed1/DBS 5pA/36Hz/pre_ictal] scanning for snapshot (budget 2000s sim) ...
+[seed3/DBS 25pA/36Hz/steady] scanning for snapshot (budget 2000s sim): done in 98.5s wall
+[seed3/DBS 25pA/36Hz/steady] probing 4 seed(s) ...
+[seed3/DBS 30pA/36Hz/steady] scanning for snapshot (budget 2000s sim): done in 98.9s wall
+[seed3/DBS 30pA/36Hz/steady] probing 4 seed(s) ...
+[seed3/DBS 40pA/36Hz/steady] scanning for snapshot (budget 2000s sim): done in 103.6s wall
+[seed3/DBS 40pA/36Hz/steady] probing 4 seed(s) ...
+[seed1/DBS 5pA/36Hz/pre_ictal] scanning for snapshot (budget 2000s sim): done in 200.4s wall
+[seed1/DBS 5pA/36Hz/pre_ictal] probing 4 seed(s) ...
+[seed3/DBS 20pA/36Hz/steady] probing 4 seed(s): done in 404.4s wall
+[seed3/DBS 20pA/40Hz] characterizing cycle ...
+[seed3/DBS 25pA/36Hz/steady] probing 4 seed(s): done in 408.0s wall
+[seed3/DBS 25pA/40Hz] characterizing cycle ...
+[seed3/DBS 30pA/36Hz/steady] probing 4 seed(s): done in 398.7s wall
+[seed3/DBS 30pA/40Hz] characterizing cycle ...
+[seed3/DBS 40pA/36Hz/steady] probing 4 seed(s): done in 406.5s wall
+[seed3/DBS 40pA/40Hz] characterizing cycle ...
+[seed3/DBS 20pA/40Hz] characterizing cycle: done in 143.2s wall
+[seed3/DBS 20pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed3/DBS 25pA/40Hz] characterizing cycle: done in 140.3s wall
+[seed3/DBS 25pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed3/DBS 30pA/40Hz] characterizing cycle: done in 139.7s wall
+[seed3/DBS 30pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed3/DBS 40pA/40Hz] characterizing cycle: done in 143.8s wall
+[seed3/DBS 40pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed1/DBS 5pA/36Hz/pre_ictal] probing 4 seed(s): done in 388.0s wall
+[seed1/DBS 5pA/40Hz] characterizing cycle ...
+[seed1/DBS 5pA/40Hz] characterizing cycle: done in 137.8s wall
+[seed1/DBS 5pA/40Hz/steady] scanning for snapshot (budget 2000s sim) ...
+[seed3/DBS 20pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 215.5s wall
+[seed3/DBS 20pA] done (ipc_ref=0.153)
+[seed3/DBS 25pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 212.4s wall
+[seed3/DBS 25pA] done (ipc_ref=0.161)
+[Parallel(n_jobs=14)]: Done  15 out of  18 | elapsed: 51.3min remaining: 10.3min
+[seed3/DBS 30pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 211.9s wall
+[seed3/DBS 30pA] done (ipc_ref=0.155)
+[seed3/DBS 40pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 212.2s wall
+[seed3/DBS 40pA] done (ipc_ref=0.159)
+[seed1/DBS 5pA/40Hz/steady] scanning for snapshot (budget 2000s sim): done in 192.9s wall
+[seed1/DBS 5pA] done (ipc_ref=0.113)
+[Parallel(n_jobs=14)]: Done  18 out of  18 | elapsed: 53.9min finished
+==============================================================================
+PHASE ORDERING (within condition, across network seeds)
+==============================================================================
+
+[DBS 10pA]
+
+[DBS 20pA]
+
+[DBS 25pA]
+
+[DBS 30pA]
+
+[DBS 40pA]
+
+[DBS 5pA]
+  [OK  ] ipc_total:mid-post_ictal     n_seeds=1  seed1: +0.019
+  [OK  ] ipc_total:pre_ictal-mid      n_seeds=1  seed1: +0.024
+  [OK  ] participation_ratio:mid-post_ictal n_seeds=1  seed1: -0.907
+  [OK  ] participation_ratio:pre_ictal-mid n_seeds=1  seed1: -3.788
+
+[benzo (k=1.0)]
+
+[untreated]
+  [OK  ] ipc_total:mid-post_ictal     n_seeds=2  seed1: +0.035, seed3: +0.024
+  [OK  ] ipc_total:pre_ictal-mid      n_seeds=2  seed1: +0.003, seed3: +0.037
+  [FAIL] ipc_total:pre_ictal-steady   n_seeds=2  seed1: -0.043, seed3: +0.004
+  [OK  ] participation_ratio:mid-post_ictal n_seeds=2  seed1: -0.641, seed3: -0.853
+  [OK  ] participation_ratio:pre_ictal-mid n_seeds=2  seed1: -3.749, seed3: -3.470
+  [OK  ] participation_ratio:pre_ictal-steady n_seeds=2  seed1: -2.392, seed3: -2.704
+
+==============================================================================
+INTERVENTION ORDERING (ipc_ref ranking, across network seeds)
+==============================================================================
+  seed1: DBS 25pA > DBS 20pA > DBS 40pA > DBS 30pA > benzo (k=1.0) > untreated > DBS 5pA
+  seed2: DBS 20pA > DBS 25pA > DBS 40pA > untreated > DBS 30pA > benzo (k=1.0) > DBS 10pA > DBS 5pA
+  seed3: DBS 25pA > DBS 40pA > DBS 30pA > DBS 20pA > benzo (k=1.0) > untreated > DBS 5pA > DBS 10pA
+
+  identical ranking across all seeds: False
+  seed1_vs_seed2: kendall tau=0.714 (p=0.030, n=7)
+  seed1_vs_seed3: kendall tau=0.810 (p=0.011, n=7)
+  seed2_vs_seed3: kendall tau=0.571 (p=0.061, n=8)
+
+summary CSV: /home/vincent/bmnn/epilepsy/seed_robustness/results/summary.csv
+raw per-job results: /home/vincent/bmnn/epilepsy/seed_robustness/results/raw/*.json
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_10pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_20pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_25pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_30pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_40pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_5pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/benzo__k_1_0_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/untreated_traces.png

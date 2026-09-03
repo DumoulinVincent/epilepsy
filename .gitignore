@@ -1,0 +1,21 @@
+# Python bytecode cache
+__pycache__/
+*.pyc
+
+# WSL/Windows "mark of the web" alternate-data-stream artifacts
+*:Zone.Identifier
+
+# Brian2 network state dumps (net.store()/restore()) -- these carry full
+# monitor history, so they routinely run 150-175MB, over GitHub's 100MB
+# per-file limit. Regenerable: baseline_2hz.bri via the notebooks' own
+# calibration cells, seed_robustness/results/baselines/*.bri via
+# `python seed_robustness/run_seed_check.py`.
+*.bri
+
+# seed_robustness pipeline: per-process scratch (each job's isolated cwd,
+# holding a throwaway copy of that seed's baseline) and the compiled Cython
+# extensions (machine/architecture-specific, not portable, not source).
+# Keep results/{raw,traces,reference,plots,summary.csv} -- those are the
+# actual outputs (small, worth versioning for the paper).
+seed_robustness/results/work/
+seed_robustness/results/cython_cache/

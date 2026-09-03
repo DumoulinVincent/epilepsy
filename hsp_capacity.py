@@ -31,7 +31,7 @@ Key modelling choices (state them in the methods section):
 """
 
 import numpy as np
-
+DEFAULT_RIDGES = np.logspace(-1, 4, 6)   
 
 # ----------------------------------------------------------------------------
 # 1. Input signal
@@ -49,31 +49,71 @@ def make_input_signal(n_steps, seed=0, kind="uniform"):
 # ----------------------------------------------------------------------------
 # 2. Capacity for a single target (ridge readout, squared correlation)
 # ----------------------------------------------------------------------------
-def _fit_capacity(X, y, ridge):
-    """Squared correlation between the best ridge-linear prediction of y from X
-    and y itself. X: (n, p) features, y: (n,) target. Both centered here."""
-    Xc = X - X.mean(0, keepdims=True)
-    yc = y - y.mean()
-    p = Xc.shape[1]
-    A = Xc.T @ Xc + ridge * np.eye(p)
-    try:
-        w = np.linalg.solve(A, Xc.T @ yc)
-    except np.linalg.LinAlgError:
-        w = np.linalg.lstsq(A, Xc.T @ yc, rcond=None)[0]
-    yhat = Xc @ w
-    den = (yhat @ yhat) * (yc @ yc)
-    if den <= 0:
-        return 0.0
-    return float(max((yhat @ yc) ** 2 / den, 0.0))
+# def _fit_capacity(X, y, ridge):
+#     """Squared correlation between the best ridge-linear prediction of y from X
+#     and y itself. X: (n, p) features, y: (n,) target. Both centered here."""
+#     Xc = X - X.mean(0, keepdims=True)
+#     yc = y - y.mean()
+#     p = Xc.shape[1]
+#     A = Xc.T @ Xc + ridge * np.eye(p)
+#     try:
+#         w = np.linalg.solve(A, Xc.T @ yc)
+#     except np.linalg.LinAlgError:
+#         w = np.linalg.lstsq(A, Xc.T @ yc, rcond=None)[0]
+#     yhat = Xc @ w
+#     den = (yhat @ yhat) * (yc @ yc)
+#     if den <= 0:
+#         return 0.0
+#     return float(max((yhat @ yc) ** 2 / den, 0.0))
 
+def _cv_splits(n, n_folds, embargo=0):
+    bounds = np.linspace(0, n, n_folds + 1).astype(int)
+    splits = []
+    for f in range(n_folds):
+        lo, hi = bounds[f], bounds[f + 1]
+        test = np.arange(lo, hi)
+        train = np.concatenate([np.arange(0, max(lo - embargo, 0)),
+                                np.arange(min(hi + embargo, n), n)])
+        splits.append((train, test))
+    return splits
 
-def _surrogate_threshold(X, n_samples, ridge, n_surrogate=20, q=99,
-                         rng=None):
-    """Noise floor: capacity recovered for RANDOM targets uncorrelated with the
-    input. Tasks below this are set to 0 (Dambre-style thresholding)."""
+def _oof_predict(X, y, ridge, splits):
+    """Out-of-fold ridge prediction of y from X, columns standardised on train."""
+    n, p = X.shape
+    oof = np.empty(n)
+    Ip = np.eye(p)
+    for tr, te in splits:
+        Xtr, Xte = X[tr], X[te]
+        mu = Xtr.mean(0); sd = Xtr.std(0) + 1e-8
+        Xtr_s = (Xtr - mu) / sd; Xte_s = (Xte - mu) / sd
+        ybar = y[tr].mean()
+        b = Xtr_s.T @ (y[tr] - ybar)
+        G = Xtr_s.T @ Xtr_s + ridge * Ip
+        try:
+            w = np.linalg.solve(G, b)
+        except np.linalg.LinAlgError:
+            w = np.linalg.lstsq(G, b, rcond=None)[0]
+        oof[te] = ybar + Xte_s @ w
+    return oof
+
+def _oof_capacity(X, y, ridge, splits):
+    """Out-of-fold squared correlation in [0,1] (no in-sample optimism)."""
+    yhat = _oof_predict(X, y, ridge, splits)
+    yc = y - y.mean(); pc = yhat - yhat.mean()
+    den = (pc @ pc) * (yc @ yc)
+    return float(max((pc @ yc) ** 2 / den, 0.0)) if den > 0 else 0.0
+
+def _select_ridge(X, targets, ridges, splits):
+    """One ridge per probe: maximise mean OOF capacity over representative
+    targets. Selecting once (not per task) avoids per-task selection bias."""
+    scores = [np.mean([_oof_capacity(X, t, lam, splits) for t in targets])
+              for lam in ridges]
+    return float(ridges[int(np.argmax(scores))])
+
+def _surrogate_threshold(X, n_samples, ridge, splits, n_surrogate=200, q=99, rng=None):
     if rng is None:
         rng = np.random.default_rng(0)
-    caps = [_fit_capacity(X, rng.standard_normal(n_samples), ridge)
+    caps = [_oof_capacity(X, rng.standard_normal(n_samples), ridge, splits)
             for _ in range(n_surrogate)]
     return float(np.percentile(caps, q))
 
@@ -86,7 +126,7 @@ def _lag(u, k_idx, d):
     return u[k_idx - d]
 
 
-def linear_memory_capacity(X, u, max_delay=40, washout=50, ridge=1e-3,
+def linear_memory_capacity(X, u, max_delay=40, washout=50, ridges=DEFAULT_RIDGES, n_folds=5,
                            threshold=None, rng=None):
     """
     X : (K, N) reservoir state per step.  u : (K,) input stream.
@@ -105,12 +145,15 @@ def linear_memory_capacity(X, u, max_delay=40, washout=50, ridge=1e-3,
         rng = np.random.default_rng(0)
     k_idx = np.arange(washout + max_delay, K)        # valid step indices
     Xv = X[k_idx]
+    splits = _cv_splits(len(k_idx), n_folds, embargo=max_delay)
+    sel = [_lag(u, k_idx, d) for d in range(min(6, max_delay + 1))]
+    ridge = _select_ridge(Xv, sel, ridges, splits)
     if threshold is None:
-        threshold = _surrogate_threshold(Xv, len(k_idx), ridge, rng=rng)
+        threshold = _surrogate_threshold(Xv, len(k_idx), ridge, splits, rng=rng)
     delays = np.arange(0, max_delay + 1)
     curve = np.zeros(len(delays))
     for i, d in enumerate(delays):
-        cap = _fit_capacity(Xv, _lag(u, k_idx, d), ridge)
+        cap = _oof_capacity(Xv, _lag(u, k_idx, d), ridge, splits)
         curve[i] = cap if cap >= threshold else 0.0
     return dict(delays=delays, curve=curve,
                 mc_with_d0=float(curve.sum()),
@@ -126,8 +169,8 @@ def _legendre2(x):
     return 0.5 * (3.0 * x ** 2 - 1.0)
 
 
-def nonlinear_capacity(X, u, max_delay=12, washout=50, ridge=1e-3,
-                       threshold=None, rng=None):
+def nonlinear_capacity(X, u, max_delay=12, washout=50,  ridges=DEFAULT_RIDGES,
+                       n_folds=5, threshold=None, rng=None):
     """
     Degree-2 capacity: quadratic self-terms P2(u[k-d]) and bilinear cross-terms
     u[k-d1]*u[k-d2]. Sum of thresholded capacities. This is the 'can it do
@@ -142,19 +185,22 @@ def nonlinear_capacity(X, u, max_delay=12, washout=50, ridge=1e-3,
         rng = np.random.default_rng(1)
     k_idx = np.arange(washout + max_delay, K)
     Xv = X[k_idx]
+    splits = _cv_splits(len(k_idx), n_folds, embargo=max_delay)
+    sel = [_legendre2(_lag(u, k_idx, d)) for d in range(min(6, max_delay + 1))]
+    ridge = _select_ridge(Xv, sel, ridges, splits)
     if threshold is None:
-        threshold = _surrogate_threshold(Xv, len(k_idx), ridge, rng=rng)
+        threshold = _surrogate_threshold(Xv, len(k_idx), ridge, splits, rng=rng)
 
     cap_self = 0.0
     for d in range(max_delay + 1):
-        c = _fit_capacity(Xv, _legendre2(_lag(u, k_idx, d)), ridge)
+        c = _oof_capacity(Xv, _legendre2(_lag(u, k_idx, d)), ridge, splits)
         cap_self += c if c >= threshold else 0.0
 
     cap_cross = 0.0
     for d1 in range(max_delay + 1):
         for d2 in range(d1 + 1, max_delay + 1):
             tgt = _lag(u, k_idx, d1) * _lag(u, k_idx, d2)
-            c = _fit_capacity(Xv, tgt, ridge)
+            c = _oof_capacity(Xv, tgt, ridge, splits)
             cap_cross += c if c >= threshold else 0.0
 
     return dict(cap_self=float(cap_self), cap_cross=float(cap_cross),
@@ -163,22 +209,24 @@ def nonlinear_capacity(X, u, max_delay=12, washout=50, ridge=1e-3,
 
 
 def capacity_report(X, u, max_delay=40, nl_max_delay=12, washout=50,
-                    ridge=1e-3, rng=None):
+                    ridges=DEFAULT_RIDGES, n_folds=5, rng=None):
     """Linear + nonlinear in one call, plus the state rank (the capacity bound)."""
     if rng is None:
         rng = np.random.default_rng(0)
     lin = linear_memory_capacity(X, u, max_delay=max_delay, washout=washout,
-                                 ridge=ridge, rng=rng)
+                                 ridges=ridges, n_folds=n_folds, rng=rng)
     nl = nonlinear_capacity(X, u, max_delay=nl_max_delay, washout=washout,
-                            ridge=ridge, rng=rng)
+                            ridges=ridges, n_folds=n_folds, rng=rng)
     Xc = np.asarray(X, float)[washout:]
     Xc = Xc - Xc.mean(0, keepdims=True)
     sv = np.linalg.svd(Xc, compute_uv=False)
     rank = int((sv > sv.max() * 1e-6).sum()) if sv.size else 0
+    lam = sv**2                                    # eigenvalues of X^T X
+    pr = float((lam.sum()**2) / (lam**2).sum()) if lam.size and lam.sum() > 0 else np.nan
     return dict(linear_mc=lin["mc_total"], linear_mc_with_d0=lin["mc_with_d0"],
                 nonlinear=nl["nonlinear_total"],
                 ipc_total=lin["mc_total"] + nl["nonlinear_total"],
-                state_rank=rank, n_state=lin["n_state"],
+                state_rank=rank, participation_ratio=pr, n_state=lin["n_state"],
                 forget_curve=lin["curve"], delays=lin["delays"])
 
 
@@ -207,7 +255,7 @@ def run_reservoir_probe(net, u, step_s=0.2, r0_hz=40.0, amp_hz=15.0,
     from brian2 import second, Hz, mV, ms
 
     u = np.asarray(u, float)
-    net.restore('baseline')
+    net.restore('baseline', filename='baseline_2hz.bri')
     inp = net['inp']; P_E = net['P_E']; PG_E = net['PG_E']; sp_E = net['sp_exc']
 
     PG_E.w[:] = alpha * float(PG_E.w[0])
@@ -216,6 +264,8 @@ def run_reservoir_probe(net, u, step_s=0.2, r0_hz=40.0, amp_hz=15.0,
         P_E.tau_rp_E_var = na_refrac_ms * ms
     if benzo:
         P_E.k_GABA_E_hsp = benzo_kGABA
+        P_E.tau_ins_GABA_E = 1e99 * second
+        P_E.tau_int_GABA_E = 1e99 * second
 
     global_ns = globals().get("_MODEL_NS", None)
     run_kw = dict(namespace=global_ns) if global_ns else {}
@@ -312,7 +362,7 @@ def snapshot_interictal(net, input_freq_hz, condition="normal",
     """
     from brian2 import second, Hz, mV, ms
 
-    net.restore('baseline')
+    net.restore('baseline', filename='baseline_2hz.bri')
     inp = net['inp']; P_E = net['P_E']; PG_E = net['PG_E']
     r_est_mon = net['r_est']; kA = net['k_AMPA_E_hsp']; kG = net['k_GABA_E_hsp']
     inp.rates = input_freq_hz * Hz
