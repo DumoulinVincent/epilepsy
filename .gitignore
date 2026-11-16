@@ -36,3 +36,5 @@ spiking_network/results/**
 
 # Epileptor probes: per-process scratch
 epileptor/results/probe_work/
+*.bbl
+*.blg
