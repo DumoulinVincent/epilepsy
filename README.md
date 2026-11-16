@@ -46,14 +46,28 @@ The first Brian2 run compiles the network with Cython (a few minutes); compiled 
 
 ## Data
 
-Raw simulation outputs are **not in git** (about 8 GB). They are kept at: **[shared drive location — to fill in]**.
-Copy them into `spiking_network/results/` keeping the folder names (`baselines/`, `lfp_tau250_15k/raw/`, ...),
-or regenerate them with the commands below. What is in git is enough to rebuild the poster; the paper figures and
-the Epileptor notebook also need the raw LFP and image runs.
+There is no experimental data: every result comes from simulations of this model, and all of them can be
+regenerated from the code here. Raw outputs (about 8 GB) are therefore **not in git**; only the small tables the
+figures read are (see `spiking_network/results/README.md`). Every run is seeded (network weights and Poisson
+input), so regenerating should give the same series with the same package versions (`requirements.txt`); other
+hardware or versions may introduce small numerical differences.
+
+To regenerate everything, from the repository root:
+
+```bash
+./reproduce_all.sh                 # all stages, in order
+./reproduce_all.sh baselines lfp   # or only some stages
+```
+
+**Warning: the full run takes about a day on a 16-core machine** (baselines ~1 h, LFP ~7 h, image task ~12 h,
+slow-HSP runs ~4 h). Each LFP job needs ~1.2 GB of RAM; lower `N_JOBS` (default 10) on smaller machines, e.g.
+`N_JOBS=4 ./reproduce_all.sh`. Stages skip runs that already exist, so an interrupted run can simply be restarted.
+
+What needs what: the **poster** rebuilds from git alone (`cd poster && python poster_figures.py && pdflatex poster_aes.tex`); the **paper** needs stages `baselines`, `lfp` and `image`; the **Epileptor notebook** needs `lfp`. The commands each stage runs are listed below.
 
 ## Pipeline
 
-All simulation commands run from `spiking_network/`. Runtimes are for a 16-core machine; LFP jobs need about
+`reproduce_all.sh` runs these steps; to run one by hand, start from `spiking_network/`. Runtimes are for a 16-core machine; LFP jobs need about
 1.2 GB of RAM each, so do not run the LFP and image batches at the same time.
 
 | step | command | output | time |
