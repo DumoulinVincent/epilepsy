@@ -1,8 +1,0 @@
-./HomeoPlasticSyn.c: ../HomeoPlasticSyn.mod
-	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
-	(cd "..";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "HomeoPlasticSyn.mod" -o "/home/vincent/bmnn/epilepsy/x86_64")
-
-./HomeoPlasticSyn.o: ./HomeoPlasticSyn.c
-	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
-	$(COMPILE) -I".." $(INCLUDES) -fPIC -c $< -o $@
-

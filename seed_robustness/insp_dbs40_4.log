@@ -1,6 +1,0 @@
-INFO       Cache size for target 'cython': 2438 MB.
-You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
-HSP tau_ins/int = 25 s; probe 36 +- 4 Hz; plateau rule: k_AMPA range < 0.06 over 750 s
-characterizing cycle ...
-bursting: False, period nan s
-snapshot at 1125 s after restore: k_AMPA 0.828, k_GABA 0.172, k_AMPA range over the window 0.0590

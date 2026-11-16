@@ -1,21 +1,38 @@
-# Python bytecode cache
+# ---------------------------------------------------------------- local only
+# Everything from before the paper cleanup that is not in the new layout (old notebooks, v1/v3 pipelines,
+# their results). The committed version of all of it is the tag `archive-2026-11`.
+_old/
+
+# Python / Jupyter / editor
 __pycache__/
 *.pyc
-
-# WSL/Windows "mark of the web" alternate-data-stream artifacts
+.ipynb_checkpoints/
 *:Zone.Identifier
+*Zone.Identifier
 
-# Brian2 network state dumps (net.store()/restore()) -- these carry full
-# monitor history, so they routinely run 150-175MB, over GitHub's 100MB
-# per-file limit. Regenerable: baseline_2hz.bri via the notebooks' own
-# calibration cells, seed_robustness/results/baselines/*.bri via
-# `python seed_robustness/run_seed_check.py`.
+# LaTeX build files (the PDFs are kept)
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+
+# Brian2 network states (net.store): ~165 MB each, regenerable with spiking_network/make_baselines.py
 *.bri
 
-# seed_robustness pipeline: per-process scratch (each job's isolated cwd,
-# holding a throwaway copy of that seed's baseline) and the compiled Cython
-# extensions (machine/architecture-specific, not portable, not source).
-# Keep results/{raw,traces,reference,plots,summary.csv} -- those are the
-# actual outputs (small, worth versioning for the paper).
-seed_robustness/results/work/
-seed_robustness/results/cython_cache/
+# ---------------------------------------------------------------- simulation results
+# Raw runs are several GB and live outside git (see README.md, "Data"). Only the small derived tables that the
+# paper and poster figures read are versioned.
+spiking_network/results/**
+!spiking_network/results/**/
+!spiking_network/results/README.md
+!spiking_network/results/lfp_tau250_15k/treatment/*.csv
+!spiking_network/results/lfp_tau250_15k/ews/*.csv
+!spiking_network/results/lfp_tau250_15k/entropy/*.csv
+!spiking_network/results/lfp_tau250_20k/treatment/*.csv
+!spiking_network/results/image_random_c16/analysis/summary.csv
+!spiking_network/results/image_c16_dbs300/analysis/summary.csv
+!spiking_network/results/long_tau/raw/*.npz
+
+# Epileptor probes: per-process scratch
+epileptor/results/probe_work/

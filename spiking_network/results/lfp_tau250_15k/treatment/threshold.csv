@@ -1,0 +1,58 @@
+seed,condition,onset,role,alarm_on,alarm_on_for_s,threshold,alarm_time_fraction
+1,untreated,4865,calibration,True,615,64.9,0.182
+1,untreated,11379,calibration,True,1129,64.9,0.182
+1,reference 40Hz,,no seizure,,,64.9,0.0
+1,benzo (k=1.0),,no seizure,,,64.9,0.824
+1,DBS 20pA,,no seizure,,,64.9,0.543
+1,DBS 60pA,,no seizure,,,64.9,0.0
+1,DBS 100pA,,no seizure,,,64.9,0.0
+1,DBS 150pA,,no seizure,,,64.9,0.0
+1,DBS 200pA,,no seizure,,,64.9,0.0
+1,DBS 250pA,,no seizure,,,64.9,0.0
+1,DBS 300pA,,no seizure,,,64.9,0.0
+2,untreated,4986,calibration,True,1336,62.05,0.211
+2,untreated,10884,calibration,True,1184,62.05,0.211
+2,reference 40Hz,,no seizure,,,62.05,0.0
+2,benzo (k=1.0),,no seizure,,,62.05,0.827
+2,DBS 20pA,,no seizure,,,62.05,0.578
+2,DBS 60pA,,no seizure,,,62.05,0.0
+2,DBS 100pA,,no seizure,,,62.05,0.0
+2,DBS 150pA,,no seizure,,,62.05,0.0
+2,DBS 200pA,,no seizure,,,62.05,0.0
+2,DBS 250pA,,no seizure,,,62.05,0.0
+2,DBS 300pA,,no seizure,,,62.05,0.0
+3,untreated,4841,calibration,True,2791,54.13,0.416
+3,untreated,8620,calibration,True,570,54.13,0.416
+3,untreated,13999,held out,True,2199,54.13,0.416
+3,reference 40Hz,,no seizure,,,54.13,0.0
+3,benzo (k=1.0),,no seizure,,,54.13,0.903
+3,DBS 20pA,10175,treatment,True,6175,54.13,0.443
+3,DBS 60pA,,no seizure,,,54.13,0.0
+3,DBS 100pA,,no seizure,,,54.13,0.01
+3,DBS 150pA,,no seizure,,,54.13,0.0
+3,DBS 200pA,,no seizure,,,54.13,0.0
+3,DBS 250pA,,no seizure,,,54.13,0.0
+3,DBS 300pA,,no seizure,,,54.13,0.0
+4,untreated,4630,calibration,True,780,62.33,0.246
+4,untreated,11221,calibration,True,2221,62.33,0.246
+4,reference 40Hz,,no seizure,,,62.33,0.0
+4,benzo (k=1.0),,no seizure,,,62.33,0.841
+4,DBS 20pA,,no seizure,,,62.33,0.599
+4,DBS 60pA,,no seizure,,,62.33,0.0
+4,DBS 100pA,,no seizure,,,62.33,0.0
+4,DBS 150pA,,no seizure,,,62.33,0.0
+4,DBS 200pA,,no seizure,,,62.33,0.0
+4,DBS 250pA,,no seizure,,,62.33,0.0
+4,DBS 300pA,,no seizure,,,62.33,0.0
+5,untreated,4260,calibration,True,2010,55.49,0.293
+5,untreated,8342,calibration,True,942,55.49,0.293
+5,untreated,12562,held out,True,1012,55.49,0.293
+5,reference 40Hz,,no seizure,,,55.49,0.0
+5,benzo (k=1.0),,no seizure,,,55.49,0.893
+5,DBS 20pA,8342,treatment,True,3842,55.49,0.331
+5,DBS 60pA,,no seizure,,,55.49,0.0
+5,DBS 100pA,,no seizure,,,55.49,0.007
+5,DBS 150pA,,no seizure,,,55.49,0.0
+5,DBS 200pA,,no seizure,,,55.49,0.0
+5,DBS 250pA,,no seizure,,,55.49,0.0
+5,DBS 300pA,,no seizure,,,55.49,0.0
