@@ -34,6 +34,9 @@ spiking_network/results/**
 !spiking_network/results/image_c16_dbs300/analysis/summary.csv
 !spiking_network/results/long_tau/raw/*.npz
 
+# Paper and poster: kept locally in manuscripts/ (separate, private); not part of the public repository
+manuscripts/
+
 # Epileptor probes: per-process scratch
 epileptor/results/probe_work/
 *.bbl

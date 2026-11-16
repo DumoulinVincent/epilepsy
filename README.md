@@ -2,7 +2,7 @@
 
 Spiking-network model (Brian2) in which **homeostatic synaptic plasticity (HSP)** turns a loss of input
 (deafferentation) into recurring **high- and low-risk periods** for seizures. The repository holds everything
-behind the paper in preparation and the AES 2026 poster (`poster/poster_aes_final.pdf`):
+behind a paper in preparation and an AES 2026 poster:
 
 1. **The cycle**: 100 excitatory + 25 inhibitory neurons; HSP scales each excitatory cell's AMPA (`k_E`) and GABA
    (`k_I`) gains to keep its rate near 2 Hz. A 10 % drop of input (40 → 36 Hz) makes HSP drift until the network
@@ -26,13 +26,11 @@ paper and are not in this tree; they are in the git tag `archive-2026-11` (see "
 | `spiking_network/` | the seeded network, the conditions, every simulation and analysis used in the paper | `seeded_network.py`, `conditions.py` |
 | `spiking_network/results/` | simulation outputs; only small tables are in git (see `results/README.md`) | |
 | `epileptor/` | HSP → Epileptor `x0` mapping: notebook, probe script, exported trajectories, theory report | `report/report.pdf` |
-| `paper/` | builds the current paper draft from the results | `build_paper.py`, `output/paper.pdf` |
-| `poster/` | AES 2026 poster (source, figure script, presented PDF) | `poster_aes_final.pdf` |
 | `docs/` | background textbook on dynamical systems and bifurcations (phase planes, folds, Hopf, slow–fast systems) | `dynamics_textbook/dynamics_textbook.pdf` |
 | `exploration/` | five early notebooks kept for reference (see `exploration/README.md`) | |
 
-Suggested reading order for a newcomer: the poster, `spiking_network/report/lfp_image_results.pdf` (short results
-report), `paper/output/paper.pdf` (draft), then `docs/dynamics_textbook` and `epileptor/report/report.pdf` before
+Suggested reading order for a newcomer: `spiking_network/report/lfp_image_results.pdf` (short results report),
+then `docs/dynamics_textbook` and `epileptor/report/report.pdf` before
 touching the Epileptor part.
 
 ## Setup
@@ -63,7 +61,7 @@ To regenerate everything, from the repository root:
 slow-HSP runs ~4 h). Each LFP job needs ~1.2 GB of RAM; lower `N_JOBS` (default 10) on smaller machines, e.g.
 `N_JOBS=4 ./reproduce_all.sh`. Stages skip runs that already exist, so an interrupted run can simply be restarted.
 
-What needs what: the **poster** rebuilds from git alone (`cd poster && python poster_figures.py && pdflatex poster_aes.tex`); the **paper** needs stages `baselines`, `lfp` and `image`; the **Epileptor notebook** needs `lfp`. The commands each stage runs are listed below.
+What needs what: the results report needs stages `baselines`, `lfp` and `image`; the **Epileptor notebook** needs `lfp`. The commands each stage runs are listed below.
 
 ## Pipeline
 
@@ -74,12 +72,12 @@ What needs what: the **poster** rebuilds from git alone (`cd poster && python po
 |---|---|---|---|
 | 0. baselines | `python make_baselines.py` | `results/baselines/seed{1..5}.bri`: each seed settled at 40 Hz, 15000 s, all HSP τ = 50 s | ~1 h |
 | 1a. LFP runs | `python -u run_lfp_cycle.py --conditions "untreated,reference 40Hz,benzo (k=1.0),DBS 20pA,DBS 60pA,DBS 100pA,DBS 150pA,DBS 200pA,DBS 250pA,DBS 300pA" --hsp-tau 250 --run-s 15000 --n-jobs 10 --skip-analysis --out results/lfp_tau250_15k` | `results/lfp_tau250_15k/raw/` (10 conditions × 5 seeds) | ~5 h |
-| 1b. long LFP runs | same with `--conditions "untreated,reference 40Hz,benzo (k=1.0),DBS 20pA" --run-s 20000 --out results/lfp_tau250_20k` (benzo and DBS 20 pA are slow to seize, so the paper takes them from here) | `results/lfp_tau250_20k/raw/` | ~2 h |
+| 1b. long LFP runs | same with `--conditions "untreated,reference 40Hz,benzo (k=1.0),DBS 20pA" --run-s 20000 --out results/lfp_tau250_20k` (benzo and DBS 20 pA are slow to seize, so their results are taken from here) | `results/lfp_tau250_20k/raw/` | ~2 h |
 | 1c. LFP analyses | `python lfp_treatment.py results/lfp_tau250_15k` (and `.../lfp_tau250_20k`); `python lfp_ews.py`; `python lfp_entropy.py` | power < 30 Hz, alarm threshold, early-warning trends, entropy | minutes |
 | 2. image task | `python -u run_image_cycle.py --contrast 16 --out results/image_random_c16 --conditions "reference 40Hz,untreated,benzo (k=1.0),DBS 20pA,DBS 60pA,DBS 100pA,DBS 150pA,DBS 200pA,DBS 250pA,DBS 300pA"` | `results/image_random_c16/{raw,analysis}/` | ~12 h (analysis included) |
-| 3. slow-HSP cycles (poster) | `python -u long_tau_cycle.py --tau 250 --tau-int-ampa 5000 --tau-ins-gaba 5000 --tau-hsp 1000 --run-s 20000 --seeds 1,2,3,4,5 --conditions "untreated,reference 40Hz,benzo (k=1.0),DBS 20pA,DBS 40pA,DBS 60pA,DBS 100pA,DBS 150pA,DBS 300pA"`; fast-HSP comparison: `--tau 250 --run-s 20000 --seeds 1` | `results/long_tau/raw/` (in git) | ~3 h |
+| 3. slow-HSP cycles | `python -u long_tau_cycle.py --tau 250 --tau-int-ampa 5000 --tau-ins-gaba 5000 --tau-hsp 1000 --run-s 20000 --seeds 1,2,3,4,5 --conditions "untreated,reference 40Hz,benzo (k=1.0),DBS 20pA,DBS 40pA,DBS 60pA,DBS 100pA,DBS 150pA,DBS 300pA"`; fast-HSP comparison: `--tau 250 --run-s 20000 --seeds 1` | `results/long_tau/raw/` (in git) | ~3 h |
 | 4. Epileptor mapping | run `epileptor/HSP_Epileptor_trajectory.ipynb` top to bottom (from `epileptor/`) | `epileptor/results/trajectories.npz`, `probes.json` | ~15 min with cached probes |
-| 5. outputs | `python paper/build_paper.py`; `python poster/poster_figures.py && pdflatex poster_aes.tex` (in `poster/`); `python spiking_network/report/build_lfp_image_report.py`; in `epileptor/report/`: `python theory_figures.py`, `python phase_plane_figures.py`, `python single_gain.py`, `pdflatex report.tex` | PDFs | minutes |
+| 5. outputs | `python spiking_network/report/build_lfp_image_report.py`; in `epileptor/report/`: `python theory_figures.py`, `python phase_plane_figures.py`, `python single_gain.py`, `pdflatex report.tex` | PDFs | minutes |
 
 Quick checks: `python test_image_task.py` (image stimulus and decoders, synthetic data);
 `python -u run_image_cycle.py --smoke` (one seed, 600 s); `python -u long_tau_cycle.py --tau 250 --run-s 30 --out /tmp/smoke`.

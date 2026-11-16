@@ -1,5 +1,5 @@
 #!/bin/bash
-# Regenerate every simulation behind the paper and the poster, then the figures and PDFs.
+# Regenerate every simulation behind the results, then the reports.
 #
 #   ./reproduce_all.sh                    # all stages, in order (about 1 day on 16 cores)
 #   ./reproduce_all.sh baselines lfp      # only some stages
@@ -9,12 +9,12 @@
 #   lfp         LFP runs: 10 conditions x 5 seeds x 15000 s, + 4 conditions x 20000 s   ~7 h
 #               and their analyses (power < 30 Hz, alarm threshold, early warning, entropy)
 #   image       image-recovery runs: 10 conditions x 5 seeds x 8000 s, + analysis       ~12 h
-#   slow        slow-HSP cycles for the poster (already in git; rerun to check)          ~4 h
+#   slow        slow-HSP cycles (already in git; rerun to check)                         ~4 h
 #   epileptor   HSP -> Epileptor x0 mapping notebook (needs lfp)                        ~15 min
-#   outputs     paper, poster, short results report, Epileptor report                   minutes
+#   outputs     short results report and Epileptor report                                minutes
 #
 # Memory: an LFP job needs ~1.2 GB; set N_JOBS (default 10) to fit your machine. Do not run two stages at once.
-# Outputs: spiking_network/results/, epileptor/results/, paper/output/, poster/.
+# Outputs: spiking_network/results/, epileptor/results/, spiking_network/report/, epileptor/report/.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 SN="$ROOT/spiking_network"
@@ -61,8 +61,6 @@ stage_epileptor() {
 }
 
 stage_outputs() {
-    cd "$ROOT/paper" && python build_paper.py
-    cd "$ROOT/poster" && python poster_figures.py && pdflatex -interaction=nonstopmode poster_aes.tex > /dev/null
     cd "$SN/report" && python build_lfp_image_report.py
     cd "$ROOT/epileptor/report" && python theory_figures.py && python phase_plane_figures.py && python single_gain.py \
         && pdflatex -interaction=nonstopmode report.tex > /dev/null && pdflatex -interaction=nonstopmode report.tex > /dev/null
