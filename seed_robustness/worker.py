@@ -20,6 +20,54 @@ for _p in (str(EPILEPSY_DIR), str(THIS_DIR)):
         sys.path.insert(0, _p)
 
 
+# 'plateau' is each condition's settled state (coarse_phase._plateau_snapshot)
+# and its IPC; 'reference' is the shared untreated 40 Hz plateau. Paired on
+# probe seed.
+CONTRASTS = (("plateau", "reference"),)
+CONDITION_PHASES = ("plateau",)
+RAW_KEYS = ("ipc_total", "ipc_encoding", "ipc_memory", "linear_d0", "forget_curve",
+            "participation_ratio", "E_rate_probe", "k_AMPA", "k_GABA",
+            "k_range", "settle_s", "converged")
+HSP_TAUS = ("tau_ins_AMPA_E", "tau_int_AMPA_E", "tau_ins_GABA_E", "tau_int_GABA_E")
+
+
+def _snapshot_kwargs(grid):
+    keys = ("n_steps", "amp_hz", "step_s", "max_delay", "char_kw", "plateau_window_s",
+            "plateau_tol", "plateau_chunk_s", "plateau_max_s", "inspect_extend_s")
+    return {**{k: grid[k] for k in keys}, "probe_r0": grid["probe_r0_hz"]}
+
+
+def _save_inspection(res, inspect_dir, slug, label, grid):
+    """Pop the probe inspection data out of a phase_capacity_seeded_coarse()
+    result, save it as <inspect_dir>/<slug>.npz and draw its two figures.
+    A plotting failure is reported but never fails the job."""
+    insp = res.pop("inspect", None)
+    if insp is None or inspect_dir is None:
+        return
+    try:
+        import probe_plots
+        path = probe_plots.save_npz(insp, Path(inspect_dir) / f"{slug}.npz", label=label,
+                                    hsp_tau_s=grid["hsp_tau_s"])
+        probe_plots.plot_npz(path)
+    except Exception:  # noqa: BLE001
+        print(f"[{slug}] inspection plots FAILED:\n{traceback.format_exc()}", flush=True)
+
+
+def prepare_local_baseline(net, baseline_path, work_dir, hsp_tau_s, weights=None):
+    """Write THIS job's baseline_2hz.bri: the seed's calibrated baseline with
+    the HSP time constants set to hsp_tau_s and any weight intervention
+    applied. HSP_Phase's functions and coarse_phase all restore('baseline')
+    from this file, so both changes hold for everything the job simulates."""
+    from brian2 import second
+    from interventions import apply_weight_intervention
+    net.restore("baseline", filename=str(baseline_path))
+    for nm in HSP_TAUS:
+        setattr(net["P_E"], nm, hsp_tau_s * second)
+    if weights:
+        apply_weight_intervention(net, weights["kind"], scale=weights.get("scale", 1.0))
+    net.store("baseline", filename=str(Path(work_dir) / "baseline_2hz.bri"))
+
+
 def _slug(name):
     return "".join(c if c.isalnum() else "_" for c in name).strip("_")
 
@@ -131,7 +179,7 @@ def extract_calibration_trace_job(seed, baseline_path, trace_out_path,
 
 def compute_reference_job(seed, baseline_path, grid, work_dir, cache_dir,
                           out_path, template_cache_dir=None,
-                          reference_freq_hz=40.0, tau_s=50.0):
+                          reference_freq_hz=40.0, tau_s=50.0, inspect_dir=None):
     """Compute the untreated `reference_freq_hz` phase (the healthy, non-
     seizure fixed point -- 40 Hz by default) ONCE per seed, drug={}. Every
     condition job then reuses this same reference instead of each drug
@@ -143,7 +191,6 @@ def compute_reference_job(seed, baseline_path, grid, work_dir, cache_dir,
     tag = f"seed{seed}/reference"
     try:
         _isolate(work_dir, cache_dir, template_cache_dir=template_cache_dir)
-        shutil.copy2(baseline_path, Path(work_dir) / "baseline_2hz.bri")
 
         from brian2 import second
         from seeded_network import build_network_seeded
@@ -155,16 +202,12 @@ def compute_reference_job(seed, baseline_path, grid, work_dir, cache_dir,
             tau_ins_GABA=tau_s * second, tau_int_GABA=tau_s * second,
             input_freq=reference_freq_hz, network_seed=seed,
         )
+        prepare_local_baseline(net, baseline_path, work_dir, grid["hsp_tau_s"])
         res = phase_capacity_seeded_coarse(
             net, reference_freq_hz, grid["probe_seeds"], drug={},
-            phases=grid["phases"], n_steps=grid["n_steps"],
-            amp_hz=grid["amp_hz"], step_s=grid["step_s"],
-            max_delay=grid["max_delay"], char_kw=grid["char_kw"],
-            snapshot_warmup_s=grid["snapshot_warmup_s"],
-            snapshot_chunk_s=grid["snapshot_chunk_s"],
-            snapshot_max_scan_s=grid["snapshot_max_scan_s"],
-            progress_tag=tag,
-        )
+            progress_tag=tag, **_snapshot_kwargs(grid))
+        _save_inspection(res, inspect_dir, f"seed{seed}_reference_{reference_freq_hz:g}Hz",
+                         f"seed {seed}, untreated {reference_freq_hz:g} Hz reference", grid)
         Path(out_path).parent.mkdir(parents=True, exist_ok=True)
         import pickle
         with open(out_path, "wb") as fh:
@@ -215,10 +258,10 @@ def _save_traces(trace_out_path, burst, reference, seed, condition_name):
 
 def run_condition_job(seed, condition_name, drug, baseline_path, grid,
                       work_dir, cache_dir, raw_out_path, reference_path,
-                      burst_freq_hz=36.0, tau_s=50.0,
-                      template_cache_dir=None, trace_out_path=None):
+                      weights=None, burst_freq_hz=36.0, tau_s=50.0,
+                      template_cache_dir=None, trace_out_path=None, inspect_dir=None):
     """Restore the per-seed baseline, run the phase-resolved IPC+PR
-    replication at `burst_freq_hz` (36 Hz) under `drug` --
+    replication at `burst_freq_hz` (36 Hz) under `drug` and/or `weights` --
     coarse_phase.phase_capacity_seeded_coarse(), which calls HSP_Phase's own
     characterize_cycle/snapshot_at_kphase/_ipc_probe unmodified -- then merge
     in the shared untreated reference phase (see compute_reference_job,
@@ -227,6 +270,16 @@ def run_condition_job(seed, condition_name, drug, baseline_path, grid,
     ipc_retained/tradeoff_score, same formula as
     HSP_Phase.intervention_comparison) from the merged result. Runs in its
     own process.
+
+    `weights`, if given ({'kind': ..., 'scale': ...}, see interventions.py),
+    is applied to the seed's ORIGINAL baseline and re-stored as this job's
+    own local baseline_2hz.bri -- HSP_Phase.characterize_cycle() etc. always
+    restore('baseline', filename='baseline_2hz.bri') as their first action,
+    which would silently wipe out a weight edit made any other way (and
+    their drug={} mechanism only recognizes na_blocker/benzo/dbs keys, so it
+    can't carry a weight instruction through). `drug=None`/`{}` still runs
+    through unmodified for weight-only conditions -- HSP_Phase._apply_drugs
+    is a no-op on an empty dict.
 
     If `trace_out_path` is given, also dumps the raw cycle traces (E/I
     population rate, k_AMPA/k_GABA, r_est vs time, at both burst_freq_hz and
@@ -237,7 +290,6 @@ def run_condition_job(seed, condition_name, drug, baseline_path, grid,
     tag = f"seed{seed}/{condition_name}"
     try:
         _isolate(work_dir, cache_dir, template_cache_dir=template_cache_dir)
-        shutil.copy2(baseline_path, Path(work_dir) / "baseline_2hz.bri")
 
         import pickle
         import numpy as np
@@ -255,33 +307,30 @@ def run_condition_job(seed, condition_name, drug, baseline_path, grid,
             tau_ins_GABA=tau_s * second, tau_int_GABA=tau_s * second,
             input_freq=burst_freq_hz, network_seed=seed,
         )
+        prepare_local_baseline(net, baseline_path, work_dir, grid["hsp_tau_s"], weights)
 
         burst = phase_capacity_seeded_coarse(
             net, burst_freq_hz, grid["probe_seeds"], drug=drug,
-            phases=grid["phases"], n_steps=grid["n_steps"],
-            amp_hz=grid["amp_hz"], step_s=grid["step_s"],
-            max_delay=grid["max_delay"], char_kw=grid["char_kw"],
-            snapshot_warmup_s=grid["snapshot_warmup_s"],
-            snapshot_chunk_s=grid["snapshot_chunk_s"],
-            snapshot_max_scan_s=grid["snapshot_max_scan_s"],
-            progress_tag=tag,
-        )
+            progress_tag=tag, **_snapshot_kwargs(grid))
+        _save_inspection(burst, inspect_dir, _slug(f"seed{seed}_{condition_name}"),
+                         f"seed {seed}, {condition_name}", grid)
 
-        # Same merge order HSP_Phase.run_phase_replication() itself uses:
-        # burst's phases first, reference's 'steady' on top (a collision would
-        # mean the reference frequency also burst, which the 40Hz fixed point
-        # isn't designed to do).
+        # The reference's own phase is also named 'plateau'; it goes under its
+        # own key so it can never overwrite the treated network's.
         by_phase = {k: v for k, v in burst["by_phase"].items() if v.get("found")}
-        by_phase.update({k: v for k, v in reference["by_phase"].items() if v.get("found")})
+        ref_plateau = reference["by_phase"].get("plateau")
+        if ref_plateau and ref_plateau.get("found"):
+            by_phase["reference"] = ref_plateau
 
-        ipc_stats = paired_phase_stats(by_phase, metric="ipc_total")
-        pr_stats = paired_phase_stats(by_phase, metric="participation_ratio")
+        ipc_stats = paired_phase_stats(by_phase, metric="ipc_total", contrasts=CONTRASTS)
+        pr_stats = paired_phase_stats(by_phase, metric="participation_ratio",
+                                      contrasts=CONTRASTS)
 
         if trace_out_path is not None:
             _save_traces(trace_out_path, burst, reference, seed, condition_name)
 
         cyc = burst["cycle"]
-        ref = by_phase.get("mid") or by_phase.get("steady")
+        ref = next((by_phase[p] for p in CONDITION_PHASES if p in by_phase), None)
         post = by_phase.get("post_ictal")
         ipc_ref = float(np.mean(ref["ipc_total"])) if ref else float("nan")
         ipc_post = float(np.mean(post["ipc_total"])) if post else ipc_ref
@@ -289,15 +338,14 @@ def run_condition_job(seed, condition_name, drug, baseline_path, grid,
         score = ipc_ref / (1.0 + cyc["cycle_lf_power"]) if ref else float("nan")
 
         raw = dict(
-            seed=seed, condition=condition_name, drug=drug,
+            seed=seed, condition=condition_name, drug=drug, weights=weights,
             cycle=dict(is_bursting=cyc["is_bursting"], period_s=cyc["period_s"],
                       recovery_s=cyc["recovery_s"], cycle_lf_power=cyc["cycle_lf_power"],
                       E_rate=cyc["E_rate"], I_rate=cyc["I_rate"]),
             ipc_stats=ipc_stats, pr_stats=pr_stats,
             ipc_ref=ipc_ref, ipc_post_ictal=ipc_post, ipc_retained=retained,
             tradeoff_score=score,
-            by_phase_raw={ph: {k: v for k, v in d.items()
-                               if k in ("ipc_total", "participation_ratio", "E_rate_probe")}
+            by_phase_raw={ph: {k: v for k, v in d.items() if k in RAW_KEYS}
                          for ph, d in by_phase.items()},
             ok=True,
         )

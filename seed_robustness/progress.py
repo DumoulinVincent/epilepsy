@@ -29,7 +29,7 @@ def brian_progress_reporter(tag):
         eta_str = (f"{elapsed_s * (1 - completed) / completed:7.0f}s"
                   if completed > 0 else "    n/a")
         print(f"[{tag}] {pct:5.1f}%  elapsed={elapsed_s:7.0f}s wall  "
-            f"ETA={eta_str}  ({float(start) + elapsed_s:.0f}/"
+            f"ETA={eta_str}  ({float(start) + completed * float(duration):.0f}/"
             f"{float(start) + float(duration):.0f}s sim)", flush=True)
     return _cb
 

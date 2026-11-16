@@ -47,6 +47,7 @@ from joblib import Parallel, delayed  # noqa: E402
 import conditions as cond_mod  # noqa: E402
 import orderings  # noqa: E402
 import plot_ipc_summary  # noqa: E402
+import plot_seizure_onset  # noqa: E402
 import plot_traces  # noqa: E402
 import worker  # noqa: E402
 
@@ -212,6 +213,7 @@ def main():
                 out_path=str(reference_dir / f"seed{seed}.pkl"),
                 template_cache_dir=str(template_cache_dir),
                 reference_freq_hz=cond_mod.STEADY_FREQ_HZ,
+                inspect_dir=str(out_dir / "ipc_probe_inspection" / "runs"),
             )
             for seed in reference_seeds
         )
@@ -248,6 +250,7 @@ def main():
         Parallel(n_jobs=n_jobs, backend="loky", verbose=10)(
             delayed(worker.run_condition_job)(
                 seed=seed, condition_name=c["name"], drug=c["drug"],
+                weights=c.get("weights"),
                 baseline_path=str(baselines_dir / f"seed{seed}.bri"),
                 grid=grid,
                 work_dir=str(out_dir / "work" / worker._slug(f"seed{seed}_{c['name']}")),
@@ -257,6 +260,7 @@ def main():
                 reference_path=str(reference_dir / f"seed{seed}.pkl"),
                 burst_freq_hz=cond_mod.BURST_FREQ_HZ,
                 template_cache_dir=str(template_cache_dir),
+                inspect_dir=str(out_dir / "ipc_probe_inspection" / "runs"),
             )
             for seed, c, raw_path, trace_path in todo
         )
@@ -281,6 +285,15 @@ def main():
         results, out_dir / "plots" / "ipc_summary.png")
     if ipc_plot:
         print(f"IPC summary (all conditions, every seed): {ipc_plot}")
+    ipc_v3 = plot_ipc_summary.plot_ipc_v3(results, out_dir / "plots" / "ipc_summary_v3.png")
+    if ipc_v3:
+        print(f"IPC summary v3 (steady-state IPC, selected conditions): {ipc_v3}")
+    for p in plot_ipc_summary.plot_ipc_v4(results, out_dir / "plots" / "ipc_summary_v4.png"):
+        print(f"IPC summary v4 (untreated, benzo, DBS 10-40 pA): {p}")
+
+    onset_paths = plot_seizure_onset.plot_all(out_dir)
+    for p in onset_paths:
+        print(f"onset-aligned plot (0-5Hz, bifurcation view): {p}")
 
 
 if __name__ == "__main__":

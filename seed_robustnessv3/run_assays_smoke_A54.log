@@ -1,0 +1,10 @@
+[plan] 2 job(s) -> /home/vincent/bmnn/epilepsy/seed_robustnessv3/results/assays_smoke_A5.4; 700 s native + 30 checkpoints x 6.3 s of branches; A = 5.4 Hz; 2 at a time
+[plan]   seed 1: untreated (b = 36 Hz)
+[plan]   seed 1: reference 40Hz (b = 40 Hz)
+[run] 2 job(s), 14 at a time; per-job logs in /home/vincent/bmnn/epilepsy/seed_robustnessv3/results/assays_smoke_A5.4/logs
+[run] 1/2 seed1_reference_40Hz: ok
+[run] 2/2 seed1_untreated: ok
+analysing 2 run(s) over 1 seed(s) ...
+seed1 reference 40Hz  burden 0.0000 | C_encode 0.898 (fixed 0.898, prop 0.894, total 0.497, thinned 0.841) | C_noise 0.709 | S_memory +0.002 (R2 d0 0.349; nulls input -0.028, permuted -0.045) | interictal S_memory +0.002 (d0 0.349) | probe-induced episodes enc/noise/mem 0/0/0 of 30 | replay 100%
+seed1 untreated       burden 0.0000 | C_encode 0.904 (fixed 0.900, prop 0.888, total 0.516, thinned 0.880) | C_noise 0.712 | S_memory -0.154 (R2 d0 -5.052; nulls input -0.028, permuted -0.433) | interictal S_memory -0.018 (d0 0.057) | probe-induced episodes enc/noise/mem 1/1/1 of 30 | replay 100%
+wrote /home/vincent/bmnn/epilepsy/seed_robustnessv3/results/assays_smoke_A5.4/analysis

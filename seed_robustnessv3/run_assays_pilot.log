@@ -1,0 +1,8 @@
+[plan] 6 job(s) -> /home/vincent/bmnn/epilepsy/seed_robustnessv3/results/assays_A3.6; 8000 s native + 375 checkpoints x 6.3 s of branches; A = 3.6 Hz; 6 at a time
+[plan]   seed 1: untreated (b = 36 Hz)
+[plan]   seed 1: benzo (k=1.0) (b = 36 Hz)
+[plan]   seed 1: DBS 20pA (b = 36 Hz)
+[plan]   seed 1: DBS 60pA (b = 36 Hz)
+[plan]   seed 1: DBS 100pA (b = 36 Hz)
+[plan]   seed 1: reference 40Hz (b = 40 Hz)
+[run] 6 job(s), 14 at a time; per-job logs in /home/vincent/bmnn/epilepsy/seed_robustnessv3/results/assays_A3.6/logs

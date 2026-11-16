@@ -1,0 +1,730 @@
+network seeds : [1, 2, 3, 4, 5]
+conditions    : ['untreated', 'benzo (k=1.0)', 'DBS 5pA', 'DBS 10pA', 'DBS 20pA', 'DBS 25pA', 'DBS 30pA', 'DBS 40pA', 'DBS 50pA', 'AMPA block (-10%)', 'AMPA block (-15%)', 'SV2A (-10%)', 'SV2A (-15%)']
+grid          : COARSE  (probe_seeds=4, n_steps=800, max_delay=15)
+n_jobs        : 14  (of 16 available cores, leaving 2 free)
+out_dir       : /home/vincent/bmnn/epilepsy/seed_robustness/results
+[prewarm] using cached compiled extensions in /home/vincent/bmnn/epilepsy/seed_robustness/results/cython_cache/_template
+[calibrate] seed 1: using cached /home/vincent/bmnn/epilepsy/seed_robustness/results/baselines/seed1.bri (+ trace)
+[calibrate] seed 2: using cached /home/vincent/bmnn/epilepsy/seed_robustness/results/baselines/seed2.bri (+ trace)
+[calibrate] seed 3: using cached /home/vincent/bmnn/epilepsy/seed_robustness/results/baselines/seed3.bri (+ trace)
+[calibrate] seed 4: using cached /home/vincent/bmnn/epilepsy/seed_robustness/results/baselines/seed4.bri (+ trace)
+[calibrate] seed 5: using cached /home/vincent/bmnn/epilepsy/seed_robustness/results/baselines/seed5.bri (+ trace)
+[reference] computing untreated 40Hz reference for 5 seed(s) (shared across all conditions)...
+[Parallel(n_jobs=5)]: Using backend LokyBackend with 5 concurrent workers.
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+[seed2/reference] starting
+[seed1/reference] starting
+[seed3/reference] starting
+[seed5/reference] starting
+[seed4/reference] starting
+[seed3/reference/40Hz] characterizing cycle ...
+[seed2/reference/40Hz] characterizing cycle ...
+[seed1/reference/40Hz] characterizing cycle ...
+[seed4/reference/40Hz] characterizing cycle ...
+[seed5/reference/40Hz] characterizing cycle ...
+[seed5/reference/40Hz] characterizing cycle: done in 407.1s wall
+[seed5/reference/40Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed3/reference/40Hz] characterizing cycle: done in 409.5s wall
+[seed3/reference/40Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed2/reference/40Hz] characterizing cycle: done in 410.5s wall
+[seed2/reference/40Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed4/reference/40Hz] characterizing cycle: done in 420.0s wall
+[seed4/reference/40Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed1/reference/40Hz] characterizing cycle: done in 422.7s wall
+[seed1/reference/40Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed5/reference/40Hz/steady] steady snapshot, converging (cap 15000s sim): done in 106.2s wall
+[seed5/reference/40Hz/steady] probing 4 seed(s) ...
+[seed2/reference/40Hz/steady] steady snapshot, converging (cap 15000s sim): done in 106.4s wall
+[seed2/reference/40Hz/steady] probing 4 seed(s) ...
+[seed3/reference/40Hz/steady] steady snapshot, converging (cap 15000s sim): done in 107.4s wall
+[seed3/reference/40Hz/steady] probing 4 seed(s) ...
+[seed4/reference/40Hz/steady] steady snapshot, converging (cap 15000s sim): done in 107.8s wall
+[seed4/reference/40Hz/steady] probing 4 seed(s) ...
+[seed1/reference/40Hz/steady] steady snapshot, converging (cap 15000s sim): done in 107.7s wall
+[seed1/reference/40Hz/steady] probing 4 seed(s) ...
+[seed5/reference/40Hz/steady] probing 4 seed(s): done in 494.0s wall
+[seed5/reference] done
+[seed2/reference/40Hz/steady] probing 4 seed(s): done in 493.8s wall
+[seed2/reference] done
+[Parallel(n_jobs=5)]: Done   2 out of   5 | elapsed: 17.4min remaining: 26.1min
+[seed3/reference/40Hz/steady] probing 4 seed(s): done in 497.9s wall
+[seed3/reference] done
+[Parallel(n_jobs=5)]: Done   3 out of   5 | elapsed: 17.4min remaining: 11.6min
+[seed4/reference/40Hz/steady] probing 4 seed(s): done in 494.4s wall
+[seed4/reference] done
+[seed1/reference/40Hz/steady] probing 4 seed(s): done in 493.9s wall
+[seed1/reference] done
+[Parallel(n_jobs=5)]: Done   5 out of   5 | elapsed: 17.6min finished
+[run] running 65 (seed, condition) job(s), 14 at a time...
+[Parallel(n_jobs=14)]: Using backend LokyBackend with 14 concurrent workers.
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+[seed1/DBS 30pA] starting
+[seed1/DBS 10pA] starting
+[seed1/DBS 25pA] starting
+[seed1/benzo (k=1.0)] starting
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+[seed1/DBS 5pA] starting
+[seed1/untreated] starting
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+[seed1/DBS 20pA] starting
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+[seed1/AMPA block (-10%)] starting
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+[seed1/DBS 50pA] starting
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+[seed1/DBS 40pA] starting
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+[seed1/AMPA block (-15%)] starting
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+INFO       Cache size for target 'cython': 2438 MB.
+You can call clear_cache('cython') to delete all files from the cache or manually delete files in the '/home/vincent/.cython/brian_extensions' directory. [brian2]
+[seed1/SV2A (-15%)] starting
+[seed1/SV2A (-10%)] starting
+[seed2/untreated] starting
+[seed1/DBS 30pA/36Hz] characterizing cycle ...
+[seed1/DBS 5pA/36Hz] characterizing cycle ...
+[seed1/DBS 10pA/36Hz] characterizing cycle ...
+[seed1/benzo (k=1.0)/36Hz] characterizing cycle ...
+[seed2/untreated/36Hz] characterizing cycle ...
+[seed1/SV2A (-15%)/36Hz] characterizing cycle ...
+[seed1/DBS 50pA/36Hz] characterizing cycle ...
+[seed1/DBS 25pA/36Hz] characterizing cycle ...
+[seed1/untreated/36Hz] characterizing cycle ...
+[seed1/DBS 20pA/36Hz] characterizing cycle ...
+[seed1/AMPA block (-15%)/36Hz] characterizing cycle ...
+[seed1/AMPA block (-10%)/36Hz] characterizing cycle ...
+[seed1/DBS 40pA/36Hz] characterizing cycle ...
+[seed1/SV2A (-10%)/36Hz] characterizing cycle ...
+[seed1/DBS 10pA/36Hz] characterizing cycle: done in 857.1s wall
+[seed1/DBS 10pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.911 (budget 6000s sim) ...
+[seed2/untreated/36Hz] characterizing cycle: done in 861.5s wall
+[seed2/untreated/36Hz/plateau] in-cycle snapshot at k_AMPA=0.940 (budget 6000s sim) ...
+[seed1/DBS 50pA/36Hz] characterizing cycle: done in 868.2s wall
+[seed1/DBS 50pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed1/untreated/36Hz] characterizing cycle: done in 866.9s wall
+[seed1/untreated/36Hz/plateau] in-cycle snapshot at k_AMPA=0.932 (budget 6000s sim) ...
+[seed1/DBS 5pA/36Hz] characterizing cycle: done in 881.9s wall
+[seed1/DBS 5pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.925 (budget 6000s sim) ...
+[seed1/DBS 40pA/36Hz] characterizing cycle: done in 917.7s wall
+[seed1/DBS 40pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed1/benzo (k=1.0)/36Hz] characterizing cycle: done in 932.8s wall
+[seed1/benzo (k=1.0)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed1/SV2A (-10%)/36Hz] characterizing cycle: done in 968.9s wall
+[seed1/SV2A (-10%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed1/DBS 30pA/36Hz] characterizing cycle: done in 1016.9s wall
+[seed1/DBS 30pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed1/SV2A (-15%)/36Hz] characterizing cycle: done in 1048.6s wall
+[seed1/SV2A (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed1/AMPA block (-10%)/36Hz] characterizing cycle: done in 1051.9s wall
+[seed1/AMPA block (-10%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed1/DBS 20pA/36Hz] characterizing cycle: done in 1089.5s wall
+[seed1/DBS 20pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.902 (budget 6000s sim) ...
+[seed1/AMPA block (-15%)/36Hz] characterizing cycle: done in 1096.0s wall
+[seed1/AMPA block (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed1/DBS 25pA/36Hz] characterizing cycle: done in 1102.6s wall
+[seed1/DBS 25pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed1/benzo (k=1.0)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 554.7s wall
+[seed1/benzo (k=1.0)/36Hz/steady] probing 4 seed(s) ...
+[seed1/SV2A (-10%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 621.0s wall
+[seed1/SV2A (-10%)/36Hz/steady] probing 4 seed(s) ...
+[seed1/AMPA block (-10%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 590.4s wall
+[seed1/AMPA block (-10%)/36Hz/steady] probing 4 seed(s) ...
+[seed1/untreated/36Hz/plateau] in-cycle snapshot at k_AMPA=0.932 (budget 6000s sim): done in 797.4s wall
+[seed1/untreated/36Hz/plateau] probing 4 seed(s) ...
+[seed1/DBS 5pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.925 (budget 6000s sim): done in 818.4s wall
+[seed1/DBS 5pA/36Hz/plateau] probing 4 seed(s) ...
+[seed1/SV2A (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 657.0s wall
+[seed1/SV2A (-15%)/36Hz/steady] probing 4 seed(s) ...
+[seed1/AMPA block (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 702.5s wall
+[seed1/AMPA block (-15%)/36Hz/steady] probing 4 seed(s) ...
+[seed1/DBS 50pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 973.8s wall
+[seed1/DBS 50pA/36Hz/steady] probing 4 seed(s) ...
+[seed2/untreated/36Hz/plateau] in-cycle snapshot at k_AMPA=0.940 (budget 6000s sim): done in 1178.0s wall
+[seed2/untreated/36Hz/plateau] probing 4 seed(s) ...
+[seed1/DBS 10pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.911 (budget 6000s sim): done in 1241.4s wall
+[seed1/DBS 10pA/36Hz/plateau] probing 4 seed(s) ...
+[seed1/DBS 40pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 1400.8s wall
+[seed1/DBS 40pA/36Hz/steady] probing 4 seed(s) ...
+[seed1/DBS 30pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 1333.8s wall
+[seed1/DBS 30pA/36Hz/steady] probing 4 seed(s) ...
+[seed1/DBS 20pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.902 (budget 6000s sim): done in 1573.8s wall
+[seed1/DBS 20pA/36Hz/plateau] probing 4 seed(s) ...
+[seed1/benzo (k=1.0)/36Hz/steady] probing 4 seed(s): done in 1193.3s wall
+[seed1/benzo (k=1.0)] done (ipc_ref=0.144)
+[seed2/benzo (k=1.0)] starting
+[seed2/benzo (k=1.0)/36Hz] characterizing cycle ...
+[seed1/untreated/36Hz/plateau] probing 4 seed(s): done in 1122.9s wall
+[seed1/untreated] done (ipc_ref=0.069)
+[seed2/DBS 5pA] starting
+[seed1/SV2A (-10%)/36Hz/steady] probing 4 seed(s): done in 1198.3s wall
+[seed1/SV2A (-10%)] done (ipc_ref=0.072)
+[seed2/DBS 10pA] starting
+[seed1/AMPA block (-10%)/36Hz/steady] probing 4 seed(s): done in 1180.0s wall
+[seed1/AMPA block (-10%)] done (ipc_ref=0.071)
+[Parallel(n_jobs=14)]: Done   4 tasks      | elapsed: 48.2min
+[seed2/DBS 20pA] starting
+[seed2/DBS 5pA/36Hz] characterizing cycle ...
+[seed1/SV2A (-15%)/36Hz/steady] probing 4 seed(s): done in 1147.3s wall
+[seed1/SV2A (-15%)] done (ipc_ref=0.129)
+[seed2/DBS 25pA] starting
+[seed2/DBS 10pA/36Hz] characterizing cycle ...
+[seed2/DBS 20pA/36Hz] characterizing cycle ...
+[seed2/DBS 25pA/36Hz] characterizing cycle ...
+[seed1/DBS 5pA/36Hz/plateau] probing 4 seed(s): done in 1215.5s wall
+[seed1/DBS 5pA] done (ipc_ref=0.076)
+[seed2/DBS 30pA] starting
+[seed1/AMPA block (-15%)/36Hz/steady] probing 4 seed(s): done in 1131.8s wall
+[seed1/AMPA block (-15%)] done (ipc_ref=0.134)
+[seed2/DBS 40pA] starting
+[seed1/DBS 50pA/36Hz/steady] probing 4 seed(s): done in 1123.8s wall
+[seed2/DBS 30pA/36Hz] characterizing cycle ...
+[seed1/DBS 50pA] done (ipc_ref=0.168)
+[seed2/DBS 50pA] starting
+[seed2/DBS 40pA/36Hz] characterizing cycle ...
+[seed2/DBS 50pA/36Hz] characterizing cycle ...
+[seed2/untreated/36Hz/plateau] probing 4 seed(s): done in 1144.1s wall
+[seed2/untreated] done (ipc_ref=0.064)
+[seed2/AMPA block (-10%)] starting
+[seed2/AMPA block (-10%)/36Hz] characterizing cycle ...
+[seed1/DBS 10pA/36Hz/plateau] probing 4 seed(s): done in 1171.7s wall
+[seed1/DBS 10pA] done (ipc_ref=0.154)
+[seed2/AMPA block (-15%)] starting
+[seed2/AMPA block (-15%)/36Hz] characterizing cycle ...
+[seed1/DBS 40pA/36Hz/steady] probing 4 seed(s): done in 1200.0s wall
+[seed1/DBS 40pA] done (ipc_ref=0.168)
+[seed2/SV2A (-10%)] starting
+[seed1/DBS 25pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 2453.6s wall
+[seed1/DBS 25pA/36Hz/steady] probing 4 seed(s) ...
+[seed2/SV2A (-10%)/36Hz] characterizing cycle ...
+[seed1/DBS 30pA/36Hz/steady] probing 4 seed(s): done in 1262.6s wall
+[seed1/DBS 30pA] done (ipc_ref=0.078)
+[seed2/SV2A (-15%)] starting
+[seed2/SV2A (-15%)/36Hz] characterizing cycle ...
+[seed2/DBS 5pA/36Hz] characterizing cycle: done in 946.3s wall
+[seed2/DBS 5pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.930 (budget 6000s sim) ...
+[seed1/DBS 20pA/36Hz/plateau] probing 4 seed(s): done in 1159.4s wall
+[seed1/DBS 20pA] done (ipc_ref=0.149)
+[Parallel(n_jobs=14)]: Done  13 tasks      | elapsed: 64.8min
+[seed3/untreated] starting
+[seed2/DBS 20pA/36Hz] characterizing cycle: done in 952.4s wall
+[seed2/DBS 20pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed3/untreated/36Hz] characterizing cycle ...
+[seed2/benzo (k=1.0)/36Hz] characterizing cycle: done in 1192.6s wall
+[seed2/benzo (k=1.0)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed2/DBS 40pA/36Hz] characterizing cycle: done in 970.4s wall
+[seed2/DBS 40pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed2/DBS 50pA/36Hz] characterizing cycle: done in 967.9s wall
+[seed2/DBS 50pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed2/DBS 30pA/36Hz] characterizing cycle: done in 1090.3s wall
+[seed2/DBS 30pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed2/DBS 10pA/36Hz] characterizing cycle: done in 1209.1s wall
+[seed2/DBS 10pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.917 (budget 6000s sim) ...
+[seed2/DBS 25pA/36Hz] characterizing cycle: done in 1225.2s wall
+[seed2/DBS 25pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed2/AMPA block (-10%)/36Hz] characterizing cycle: done in 1105.6s wall
+[seed2/AMPA block (-10%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed2/AMPA block (-15%)/36Hz] characterizing cycle: done in 1166.5s wall
+[seed2/AMPA block (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed2/benzo (k=1.0)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 616.5s wall
+[seed2/benzo (k=1.0)/36Hz/steady] probing 4 seed(s) ...
+[seed2/SV2A (-10%)/36Hz] characterizing cycle: done in 1036.5s wall
+[seed2/SV2A (-10%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed2/SV2A (-15%)/36Hz] characterizing cycle: done in 1056.1s wall
+[seed2/SV2A (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed1/DBS 25pA/36Hz/steady] probing 4 seed(s): done in 1186.4s wall
+[seed1/DBS 25pA] done (ipc_ref=0.038)
+[seed3/benzo (k=1.0)] starting
+[seed3/benzo (k=1.0)/36Hz] characterizing cycle ...
+[seed2/DBS 20pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 977.4s wall
+[seed2/DBS 20pA/36Hz/steady] probing 4 seed(s) ...
+[seed2/DBS 50pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 869.0s wall
+[seed2/DBS 50pA/36Hz/steady] probing 4 seed(s) ...
+[seed3/untreated/36Hz] characterizing cycle: done in 976.0s wall
+[seed3/untreated/36Hz/plateau] in-cycle snapshot at k_AMPA=0.938 (budget 6000s sim) ...
+[seed2/AMPA block (-10%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 545.1s wall
+[seed2/AMPA block (-10%)/36Hz/steady] probing 4 seed(s) ...
+[seed2/DBS 10pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.917 (budget 6000s sim): done in 869.0s wall
+[seed2/DBS 10pA/36Hz/plateau] probing 4 seed(s) ...
+[seed2/AMPA block (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 470.0s wall
+[seed2/AMPA block (-15%)/36Hz/steady] probing 4 seed(s) ...
+[seed2/DBS 5pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.930 (budget 6000s sim): done in 1220.1s wall
+[seed2/DBS 5pA/36Hz/plateau] probing 4 seed(s) ...
+[seed2/DBS 40pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 1119.9s wall
+[seed2/DBS 40pA/36Hz/steady] probing 4 seed(s) ...
+[seed2/DBS 30pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 1039.9s wall
+[seed2/DBS 30pA/36Hz/steady] probing 4 seed(s) ...
+[seed2/DBS 25pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 1033.1s wall
+[seed2/DBS 25pA/36Hz/steady] probing 4 seed(s) ...
+[seed2/SV2A (-10%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 560.4s wall
+[seed2/SV2A (-10%)/36Hz/steady] probing 4 seed(s) ...
+[seed2/SV2A (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 451.3s wall
+[seed2/SV2A (-15%)/36Hz/steady] probing 4 seed(s) ...
+[seed2/benzo (k=1.0)/36Hz/steady] probing 4 seed(s): done in 1029.1s wall
+[seed2/benzo (k=1.0)] done (ipc_ref=0.142)
+[seed3/DBS 5pA] starting
+[seed3/DBS 5pA/36Hz] characterizing cycle ...
+[seed3/untreated/36Hz/plateau] in-cycle snapshot at k_AMPA=0.938 (budget 6000s sim): done in 790.1s wall
+[seed3/untreated/36Hz/plateau] probing 4 seed(s) ...
+[seed3/benzo (k=1.0)/36Hz] characterizing cycle: done in 930.1s wall
+[seed3/benzo (k=1.0)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed2/DBS 20pA/36Hz/steady] probing 4 seed(s): done in 987.5s wall
+[seed2/DBS 20pA] done (ipc_ref=0.055)
+[seed3/DBS 10pA] starting
+[seed3/DBS 10pA/36Hz] characterizing cycle ...
+[seed2/DBS 50pA/36Hz/steady] probing 4 seed(s): done in 995.6s wall
+[seed2/DBS 50pA] done (ipc_ref=0.155)
+[seed3/DBS 20pA] starting
+[seed3/DBS 20pA/36Hz] characterizing cycle ...
+[seed2/AMPA block (-10%)/36Hz/steady] probing 4 seed(s): done in 1022.2s wall
+[seed2/AMPA block (-10%)] done (ipc_ref=0.062)
+[seed3/DBS 25pA] starting
+[seed2/AMPA block (-15%)/36Hz/steady] probing 4 seed(s): done in 995.4s wall
+[seed2/AMPA block (-15%)] done (ipc_ref=0.145)
+[seed3/DBS 30pA] starting
+[seed3/DBS 25pA/36Hz] characterizing cycle ...
+[seed2/DBS 10pA/36Hz/plateau] probing 4 seed(s): done in 1065.2s wall
+[seed2/DBS 10pA] done (ipc_ref=0.127)
+[seed3/DBS 40pA] starting
+[seed3/DBS 30pA/36Hz] characterizing cycle ...
+[seed2/DBS 5pA/36Hz/plateau] probing 4 seed(s): done in 1010.9s wall
+[seed2/DBS 5pA] done (ipc_ref=0.068)
+[seed3/DBS 50pA] starting
+[seed3/DBS 40pA/36Hz] characterizing cycle ...
+[seed3/DBS 50pA/36Hz] characterizing cycle ...
+[seed2/DBS 30pA/36Hz/steady] probing 4 seed(s): done in 1043.2s wall
+[seed2/DBS 30pA] done (ipc_ref=0.075)
+[Parallel(n_jobs=14)]: Done  22 tasks      | elapsed: 103.4min
+[seed3/AMPA block (-10%)] starting
+[seed2/DBS 25pA/36Hz/steady] probing 4 seed(s): done in 994.5s wall
+[seed2/DBS 25pA] done (ipc_ref=0.075)
+[seed3/AMPA block (-15%)] starting
+[seed2/DBS 40pA/36Hz/steady] probing 4 seed(s): done in 1091.8s wall
+[seed2/DBS 40pA] done (ipc_ref=0.157)
+[seed3/SV2A (-10%)] starting
+[seed2/SV2A (-10%)/36Hz/steady] probing 4 seed(s): done in 995.3s wall
+[seed2/SV2A (-10%)] done (ipc_ref=0.064)
+[seed3/SV2A (-15%)] starting
+[seed3/AMPA block (-10%)/36Hz] characterizing cycle ...
+[seed3/AMPA block (-15%)/36Hz] characterizing cycle ...
+[seed3/SV2A (-10%)/36Hz] characterizing cycle ...
+[seed3/SV2A (-15%)/36Hz] characterizing cycle ...
+[seed2/SV2A (-15%)/36Hz/steady] probing 4 seed(s): done in 1058.9s wall
+[seed2/SV2A (-15%)] done (ipc_ref=0.145)
+[seed4/untreated] starting
+[seed3/benzo (k=1.0)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 542.5s wall
+[seed3/benzo (k=1.0)/36Hz/steady] probing 4 seed(s) ...
+[seed4/untreated/36Hz] characterizing cycle ...
+[seed3/DBS 5pA/36Hz] characterizing cycle: done in 889.1s wall
+[seed3/DBS 5pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.938 (budget 6000s sim) ...
+[seed3/untreated/36Hz/plateau] probing 4 seed(s): done in 1066.8s wall
+[seed3/untreated] done (ipc_ref=0.061)
+[seed4/benzo (k=1.0)] starting
+[seed3/DBS 25pA/36Hz] characterizing cycle: done in 770.5s wall
+[seed3/DBS 25pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed3/DBS 10pA/36Hz] characterizing cycle: done in 919.7s wall
+[seed3/DBS 10pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.928 (budget 6000s sim) ...
+[seed4/benzo (k=1.0)/36Hz] characterizing cycle ...
+[seed3/DBS 30pA/36Hz] characterizing cycle: done in 789.1s wall
+[seed3/DBS 30pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed3/DBS 20pA/36Hz] characterizing cycle: done in 897.8s wall
+[seed3/DBS 20pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed3/DBS 40pA/36Hz] characterizing cycle: done in 810.9s wall
+[seed3/DBS 40pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed3/DBS 50pA/36Hz] characterizing cycle: done in 837.9s wall
+[seed3/DBS 50pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed3/SV2A (-15%)/36Hz] characterizing cycle: done in 794.8s wall
+[seed3/SV2A (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed3/AMPA block (-15%)/36Hz] characterizing cycle: done in 908.1s wall
+[seed3/AMPA block (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed3/AMPA block (-10%)/36Hz] characterizing cycle: done in 949.9s wall
+[seed3/AMPA block (-10%)/36Hz/plateau] in-cycle snapshot at k_AMPA=0.950 (budget 6000s sim) ...
+[seed3/SV2A (-10%)/36Hz] characterizing cycle: done in 931.8s wall
+[seed3/SV2A (-10%)/36Hz/plateau] in-cycle snapshot at k_AMPA=0.950 (budget 6000s sim) ...
+[seed4/untreated/36Hz] characterizing cycle: done in 907.8s wall
+[seed4/untreated/36Hz/plateau] in-cycle snapshot at k_AMPA=0.932 (budget 6000s sim) ...
+[seed3/benzo (k=1.0)/36Hz/steady] probing 4 seed(s): done in 1094.2s wall
+[seed3/benzo (k=1.0)] done (ipc_ref=0.140)
+[seed4/DBS 5pA] starting
+[seed3/SV2A (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 360.8s wall
+[seed3/SV2A (-15%)/36Hz/steady] probing 4 seed(s) ...
+[seed3/DBS 5pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.938 (budget 6000s sim): done in 901.2s wall
+[seed3/DBS 5pA/36Hz/plateau] probing 4 seed(s) ...
+[seed4/DBS 5pA/36Hz] characterizing cycle ...
+[seed3/AMPA block (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 366.0s wall
+[seed3/AMPA block (-15%)/36Hz/steady] probing 4 seed(s) ...
+[seed4/benzo (k=1.0)/36Hz] characterizing cycle: done in 876.7s wall
+[seed4/benzo (k=1.0)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed3/DBS 30pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 1073.3s wall
+[seed3/DBS 30pA/36Hz/steady] probing 4 seed(s) ...
+[seed3/DBS 40pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 1097.2s wall
+[seed3/DBS 40pA/36Hz/steady] probing 4 seed(s) ...
+[seed3/DBS 50pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 1084.9s wall
+[seed3/DBS 50pA/36Hz/steady] probing 4 seed(s) ...
+[seed4/untreated/36Hz/plateau] in-cycle snapshot at k_AMPA=0.932 (budget 6000s sim): done in 833.9s wall
+[seed4/untreated/36Hz/plateau] probing 4 seed(s) ...
+[seed3/DBS 10pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.928 (budget 6000s sim): done in 1343.3s wall
+[seed3/DBS 10pA/36Hz/plateau] probing 4 seed(s) ...
+[seed4/benzo (k=1.0)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 502.0s wall
+[seed4/benzo (k=1.0)/36Hz/steady] probing 4 seed(s) ...
+[seed4/DBS 5pA/36Hz] characterizing cycle: done in 818.8s wall
+[seed4/DBS 5pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.932 (budget 6000s sim) ...
+[seed3/SV2A (-15%)/36Hz/steady] probing 4 seed(s): done in 1073.4s wall
+[seed3/SV2A (-15%)] done (ipc_ref=0.124)
+[seed4/DBS 10pA] starting
+[seed4/DBS 10pA/36Hz] characterizing cycle ...
+[seed3/DBS 5pA/36Hz/plateau] probing 4 seed(s): done in 1133.4s wall
+[seed3/DBS 5pA] done (ipc_ref=0.061)
+[seed4/DBS 20pA] starting
+[seed4/DBS 20pA/36Hz] characterizing cycle ...
+[seed3/AMPA block (-15%)/36Hz/steady] probing 4 seed(s): done in 1183.9s wall
+[seed3/AMPA block (-15%)] done (ipc_ref=0.124)
+[seed4/DBS 25pA] starting
+[seed4/DBS 25pA/36Hz] characterizing cycle ...
+[seed3/AMPA block (-10%)/36Hz/plateau] in-cycle snapshot at k_AMPA=0.950 (budget 6000s sim): done in 1699.4s wall
+[seed3/AMPA block (-10%)] done (ipc_ref=nan)
+[seed4/DBS 30pA] starting
+[seed3/SV2A (-10%)/36Hz/plateau] in-cycle snapshot at k_AMPA=0.950 (budget 6000s sim): done in 1721.9s wall
+[seed3/SV2A (-10%)] done (ipc_ref=nan)
+[Parallel(n_jobs=14)]: Done  33 tasks      | elapsed: 149.1min
+[seed4/DBS 40pA] starting
+[seed4/DBS 30pA/36Hz] characterizing cycle ...
+[seed3/DBS 20pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 2111.6s wall
+[seed3/DBS 20pA/36Hz/steady] probing 4 seed(s) ...
+[seed4/DBS 40pA/36Hz] characterizing cycle ...
+[seed3/DBS 30pA/36Hz/steady] probing 4 seed(s): done in 1147.7s wall
+[seed3/DBS 30pA] done (ipc_ref=0.098)
+[seed4/DBS 50pA] starting
+[seed4/DBS 50pA/36Hz] characterizing cycle ...
+[seed3/DBS 40pA/36Hz/steady] probing 4 seed(s): done in 1220.5s wall
+[seed3/DBS 40pA] done (ipc_ref=0.175)
+[seed4/AMPA block (-10%)] starting
+[seed3/DBS 50pA/36Hz/steady] probing 4 seed(s): done in 1228.6s wall
+[seed3/DBS 50pA] done (ipc_ref=0.165)
+[seed4/AMPA block (-15%)] starting
+[seed4/AMPA block (-10%)/36Hz] characterizing cycle ...
+[seed4/AMPA block (-15%)/36Hz] characterizing cycle ...
+[seed4/untreated/36Hz/plateau] probing 4 seed(s): done in 1261.8s wall
+[seed4/untreated] done (ipc_ref=0.069)
+[seed4/SV2A (-10%)] starting
+[seed4/DBS 5pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.932 (budget 6000s sim): done in 1075.3s wall
+[seed4/DBS 5pA/36Hz/plateau] probing 4 seed(s) ...
+[seed4/benzo (k=1.0)/36Hz/steady] probing 4 seed(s): done in 1180.3s wall
+[seed4/benzo (k=1.0)] done (ipc_ref=0.140)
+[seed4/SV2A (-15%)] starting
+[seed4/SV2A (-10%)/36Hz] characterizing cycle ...
+[seed3/DBS 10pA/36Hz/plateau] probing 4 seed(s): done in 1260.2s wall
+[seed3/DBS 10pA] done (ipc_ref=0.064)
+[seed5/untreated] starting
+[seed4/SV2A (-15%)/36Hz] characterizing cycle ...
+[seed5/untreated/36Hz] characterizing cycle ...
+[seed4/DBS 10pA/36Hz] characterizing cycle: done in 999.0s wall
+[seed4/DBS 10pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.919 (budget 6000s sim) ...
+[seed4/DBS 20pA/36Hz] characterizing cycle: done in 1089.8s wall
+[seed4/DBS 20pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed4/DBS 25pA/36Hz] characterizing cycle: done in 1141.9s wall
+[seed4/DBS 25pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed4/DBS 40pA/36Hz] characterizing cycle: done in 942.7s wall
+[seed4/DBS 40pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed4/DBS 30pA/36Hz] characterizing cycle: done in 976.3s wall
+[seed4/DBS 30pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed4/DBS 50pA/36Hz] characterizing cycle: done in 950.9s wall
+[seed4/DBS 50pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed4/AMPA block (-10%)/36Hz] characterizing cycle: done in 922.0s wall
+[seed4/AMPA block (-10%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed3/DBS 20pA/36Hz/steady] probing 4 seed(s): done in 1307.4s wall
+[seed3/DBS 20pA] done (ipc_ref=0.067)
+[seed5/benzo (k=1.0)] starting
+[seed5/benzo (k=1.0)/36Hz] characterizing cycle ...
+[seed4/AMPA block (-15%)/36Hz] characterizing cycle: done in 1100.2s wall
+[seed4/AMPA block (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed4/SV2A (-10%)/36Hz] characterizing cycle: done in 1075.3s wall
+[seed4/SV2A (-10%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed4/SV2A (-15%)/36Hz] characterizing cycle: done in 1145.1s wall
+[seed4/SV2A (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed4/DBS 5pA/36Hz/plateau] probing 4 seed(s): done in 1272.7s wall
+[seed4/DBS 5pA] done (ipc_ref=0.065)
+[seed5/DBS 5pA] starting
+[seed4/DBS 10pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.919 (budget 6000s sim): done in 1071.6s wall
+[seed4/DBS 10pA/36Hz/plateau] probing 4 seed(s) ...
+[seed3/DBS 25pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 3905.7s wall
+[seed3/DBS 25pA/36Hz/steady] probing 4 seed(s) ...
+[seed5/DBS 5pA/36Hz] characterizing cycle ...
+[seed5/untreated/36Hz] characterizing cycle: done in 1215.4s wall
+[seed5/untreated/36Hz/plateau] in-cycle snapshot at k_AMPA=0.937 (budget 6000s sim) ...
+[seed4/DBS 20pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 1011.4s wall
+[seed4/DBS 20pA/36Hz/steady] probing 4 seed(s) ...
+[seed4/AMPA block (-10%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 596.3s wall
+[seed4/AMPA block (-10%)/36Hz/steady] probing 4 seed(s) ...
+[seed4/AMPA block (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 460.0s wall
+[seed4/AMPA block (-15%)/36Hz/steady] probing 4 seed(s) ...
+[seed4/DBS 50pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 924.5s wall
+[seed4/DBS 50pA/36Hz/steady] probing 4 seed(s) ...
+[seed4/SV2A (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 484.4s wall
+[seed4/SV2A (-15%)/36Hz/steady] probing 4 seed(s) ...
+[seed4/SV2A (-10%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 659.9s wall
+[seed4/SV2A (-10%)/36Hz/steady] probing 4 seed(s) ...
+[seed4/DBS 25pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 1293.6s wall
+[seed4/DBS 25pA/36Hz/steady] probing 4 seed(s) ...
+[seed5/untreated/36Hz/plateau] in-cycle snapshot at k_AMPA=0.937 (budget 6000s sim): done in 660.2s wall
+[seed5/untreated/36Hz/plateau] probing 4 seed(s) ...
+[seed5/benzo (k=1.0)/36Hz] characterizing cycle: done in 1027.3s wall
+[seed5/benzo (k=1.0)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed4/DBS 30pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 1467.6s wall
+[seed4/DBS 30pA/36Hz/steady] probing 4 seed(s) ...
+[seed4/DBS 40pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 1539.3s wall
+[seed4/DBS 40pA/36Hz/steady] probing 4 seed(s) ...
+[seed5/DBS 5pA/36Hz] characterizing cycle: done in 902.1s wall
+[seed5/DBS 5pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.927 (budget 6000s sim) ...
+[seed4/DBS 10pA/36Hz/plateau] probing 4 seed(s): done in 1103.4s wall
+[seed4/DBS 10pA] done (ipc_ref=0.105)
+[seed5/DBS 10pA] starting
+[seed5/DBS 10pA/36Hz] characterizing cycle ...
+[seed3/DBS 25pA/36Hz/steady] probing 4 seed(s): done in 1135.8s wall
+[seed3/DBS 25pA] done (ipc_ref=0.120)
+[seed5/DBS 20pA] starting
+[seed5/benzo (k=1.0)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 494.9s wall
+[seed5/benzo (k=1.0)/36Hz/steady] probing 4 seed(s) ...
+[seed5/DBS 20pA/36Hz] characterizing cycle ...
+[seed4/DBS 20pA/36Hz/steady] probing 4 seed(s): done in 1142.5s wall
+[seed4/DBS 20pA] done (ipc_ref=0.053)
+[seed5/DBS 25pA] starting
+[seed5/DBS 25pA/36Hz] characterizing cycle ...
+[seed4/AMPA block (-15%)/36Hz/steady] probing 4 seed(s): done in 1063.0s wall
+[seed4/AMPA block (-15%)] done (ipc_ref=0.127)
+[Parallel(n_jobs=14)]: Done  45 out of  65 | elapsed: 199.7min remaining: 88.8min
+[seed5/DBS 30pA] starting
+[seed4/AMPA block (-10%)/36Hz/steady] probing 4 seed(s): done in 1162.0s wall
+[seed4/AMPA block (-10%)] done (ipc_ref=0.057)
+[seed5/DBS 40pA] starting
+[seed5/DBS 30pA/36Hz] characterizing cycle ...
+[seed5/DBS 40pA/36Hz] characterizing cycle ...
+[seed4/DBS 50pA/36Hz/steady] probing 4 seed(s): done in 1090.3s wall
+[seed4/DBS 50pA] done (ipc_ref=0.145)
+[seed5/DBS 50pA] starting
+[seed4/SV2A (-15%)/36Hz/steady] probing 4 seed(s): done in 1021.3s wall
+[seed4/SV2A (-15%)] done (ipc_ref=0.127)
+[seed5/AMPA block (-10%)] starting
+[seed5/DBS 50pA/36Hz] characterizing cycle ...
+[seed5/AMPA block (-10%)/36Hz] characterizing cycle ...
+[seed5/DBS 5pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.927 (budget 6000s sim): done in 622.1s wall
+[seed5/DBS 5pA/36Hz/plateau] probing 4 seed(s) ...
+[seed4/SV2A (-10%)/36Hz/steady] probing 4 seed(s): done in 1099.0s wall
+[seed4/SV2A (-10%)] done (ipc_ref=0.057)
+[seed5/AMPA block (-15%)] starting
+[seed4/DBS 25pA/36Hz/steady] probing 4 seed(s): done in 1079.3s wall
+[seed4/DBS 25pA] done (ipc_ref=0.081)
+[seed5/SV2A (-10%)] starting
+[seed5/AMPA block (-15%)/36Hz] characterizing cycle ...
+[seed5/SV2A (-10%)/36Hz] characterizing cycle ...
+[seed5/untreated/36Hz/plateau] probing 4 seed(s): done in 1095.6s wall
+[seed5/untreated] done (ipc_ref=0.080)
+[seed5/SV2A (-15%)] starting
+[seed4/DBS 30pA/36Hz/steady] probing 4 seed(s): done in 1057.3s wall
+[seed4/DBS 30pA] done (ipc_ref=0.082)
+[Parallel(n_jobs=14)]: Done  52 out of  65 | elapsed: 207.9min remaining: 52.0min
+[seed4/DBS 40pA/36Hz/steady] probing 4 seed(s): done in 1032.7s wall
+[seed4/DBS 40pA] done (ipc_ref=0.184)
+[seed5/SV2A (-15%)/36Hz] characterizing cycle ...
+[seed5/DBS 10pA/36Hz] characterizing cycle: done in 851.8s wall
+[seed5/DBS 10pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.912 (budget 6000s sim) ...
+[seed5/DBS 20pA/36Hz] characterizing cycle: done in 808.8s wall
+[seed5/DBS 20pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.901 (budget 6000s sim) ...
+[seed5/DBS 25pA/36Hz] characterizing cycle: done in 791.8s wall
+[seed5/DBS 25pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed5/DBS 30pA/36Hz] characterizing cycle: done in 767.4s wall
+[seed5/DBS 30pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed5/benzo (k=1.0)/36Hz/steady] probing 4 seed(s): done in 1008.6s wall
+[seed5/benzo (k=1.0)] done (ipc_ref=0.165)
+[seed5/DBS 40pA/36Hz] characterizing cycle: done in 857.3s wall
+[seed5/DBS 40pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed5/DBS 50pA/36Hz] characterizing cycle: done in 783.9s wall
+[seed5/DBS 50pA/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed5/AMPA block (-10%)/36Hz] characterizing cycle: done in 813.0s wall
+[seed5/AMPA block (-10%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed5/AMPA block (-15%)/36Hz] characterizing cycle: done in 756.8s wall
+[seed5/AMPA block (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed5/SV2A (-10%)/36Hz] characterizing cycle: done in 742.3s wall
+[seed5/SV2A (-10%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed5/DBS 5pA/36Hz/plateau] probing 4 seed(s): done in 941.6s wall
+[seed5/DBS 5pA] done (ipc_ref=0.111)
+[seed5/SV2A (-15%)/36Hz] characterizing cycle: done in 756.6s wall
+[seed5/SV2A (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim) ...
+[seed5/AMPA block (-10%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 424.3s wall
+[seed5/AMPA block (-10%)/36Hz/steady] probing 4 seed(s) ...
+[seed5/DBS 10pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.912 (budget 6000s sim): done in 754.9s wall
+[seed5/DBS 10pA/36Hz/plateau] probing 4 seed(s) ...
+[seed5/AMPA block (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 464.2s wall
+[seed5/AMPA block (-15%)/36Hz/steady] probing 4 seed(s) ...
+[seed5/SV2A (-10%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 482.9s wall
+[seed5/SV2A (-10%)/36Hz/steady] probing 4 seed(s) ...
+[seed5/DBS 20pA/36Hz/plateau] in-cycle snapshot at k_AMPA=0.901 (budget 6000s sim): done in 912.9s wall
+[seed5/DBS 20pA/36Hz/plateau] probing 4 seed(s) ...
+[seed5/DBS 25pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 863.2s wall
+[seed5/DBS 25pA/36Hz/steady] probing 4 seed(s) ...
+[seed5/DBS 30pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 887.3s wall
+[seed5/DBS 30pA/36Hz/steady] probing 4 seed(s) ...
+[seed5/DBS 50pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 755.4s wall
+[seed5/DBS 50pA/36Hz/steady] probing 4 seed(s) ...
+[seed5/SV2A (-15%)/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 506.7s wall
+[seed5/SV2A (-15%)/36Hz/steady] probing 4 seed(s) ...
+[seed5/DBS 40pA/36Hz/steady] steady snapshot, converging (cap 15000s sim): done in 1007.0s wall
+[seed5/DBS 40pA/36Hz/steady] probing 4 seed(s) ...
+[seed5/DBS 10pA/36Hz/plateau] probing 4 seed(s): done in 970.7s wall
+[seed5/DBS 10pA] done (ipc_ref=0.105)
+[seed5/AMPA block (-10%)/36Hz/steady] probing 4 seed(s): done in 991.0s wall
+[seed5/AMPA block (-10%)] done (ipc_ref=0.080)
+[seed5/AMPA block (-15%)/36Hz/steady] probing 4 seed(s): done in 929.3s wall
+[seed5/AMPA block (-15%)] done (ipc_ref=0.102)
+[seed5/SV2A (-10%)/36Hz/steady] probing 4 seed(s): done in 916.9s wall
+[seed5/SV2A (-10%)] done (ipc_ref=0.080)
+[Parallel(n_jobs=14)]: Done  59 out of  65 | elapsed: 242.0min remaining: 24.6min
+[seed5/DBS 20pA/36Hz/plateau] probing 4 seed(s): done in 915.0s wall
+[seed5/DBS 20pA] done (ipc_ref=0.148)
+[seed5/DBS 25pA/36Hz/steady] probing 4 seed(s): done in 910.2s wall
+[seed5/DBS 25pA] done (ipc_ref=0.021)
+[seed5/DBS 30pA/36Hz/steady] probing 4 seed(s): done in 873.1s wall
+[seed5/DBS 30pA] done (ipc_ref=0.067)
+[seed5/DBS 50pA/36Hz/steady] probing 4 seed(s): done in 857.4s wall
+[seed5/DBS 50pA] done (ipc_ref=0.154)
+[seed5/SV2A (-15%)/36Hz/steady] probing 4 seed(s): done in 808.4s wall
+[seed5/SV2A (-15%)] done (ipc_ref=0.102)
+[seed5/DBS 40pA/36Hz/steady] probing 4 seed(s): done in 724.3s wall
+[seed5/DBS 40pA] done (ipc_ref=0.163)
+[Parallel(n_jobs=14)]: Done  65 out of  65 | elapsed: 243.9min finished
+==============================================================================
+PHASE ORDERING (within condition, across network seeds)
+==============================================================================
+
+[AMPA block (-10%)]
+  [OK  ] ipc_total:steady-reference   n_seeds=4  seed1: -0.092, seed2: -0.078, seed4: -0.097, seed5: -0.081
+  [OK  ] participation_ratio:steady-reference n_seeds=4  seed1: -41.536, seed2: -41.964, seed4: -41.864, seed5: -42.013
+
+[AMPA block (-15%)]
+  [FAIL] ipc_total:steady-reference   n_seeds=5  seed1: -0.028, seed2: +0.005, seed3: -0.019, seed4: -0.027, seed5: -0.058
+  [OK  ] participation_ratio:steady-reference n_seeds=5  seed1: -2.728, seed2: -3.273, seed3: -3.276, seed4: -3.045, seed5: -22.706
+
+[DBS 10pA]
+  [OK  ] ipc_total:plateau-reference  n_seeds=5  seed1: -0.009, seed2: -0.013, seed3: -0.079, seed4: -0.049, seed5: -0.055
+  [OK  ] participation_ratio:plateau-reference n_seeds=5  seed1: -4.487, seed2: -23.577, seed3: -41.897, seed4: -23.169, seed5: -23.777
+
+[DBS 20pA]
+  [OK  ] ipc_total:plateau-reference  n_seeds=2  seed1: -0.013, seed5: -0.013
+  [OK  ] ipc_total:steady-reference   n_seeds=3  seed2: -0.085, seed3: -0.076, seed4: -0.101
+  [OK  ] participation_ratio:plateau-reference n_seeds=2  seed1: -4.522, seed5: -4.447
+  [OK  ] participation_ratio:steady-reference n_seeds=3  seed2: -77.682, seed3: -62.177, seed4: -61.866
+
+[DBS 25pA]
+  [OK  ] ipc_total:steady-reference   n_seeds=5  seed1: -0.125, seed2: -0.065, seed3: -0.023, seed4: -0.073, seed5: -0.140
+  [OK  ] participation_ratio:steady-reference n_seeds=5  seed1: -61.798, seed2: -43.655, seed3: -22.768, seed4: -43.466, seed5: -81.039
+
+[DBS 30pA]
+  [OK  ] ipc_total:steady-reference   n_seeds=5  seed1: -0.085, seed2: -0.065, seed3: -0.045, seed4: -0.072, seed5: -0.094
+  [OK  ] participation_ratio:steady-reference n_seeds=5  seed1: -42.711, seed2: -42.919, seed3: -43.181, seed4: -42.944, seed5: -42.813
+
+[DBS 40pA]
+  [OK  ] ipc_total:steady-reference   n_seeds=5  seed1: +0.005, seed2: +0.017, seed3: +0.032, seed4: +0.030, seed5: +0.003
+  [OK  ] participation_ratio:steady-reference n_seeds=5  seed1: -4.352, seed2: -3.538, seed3: -4.113, seed4: -4.623, seed5: -3.748
+
+[DBS 50pA]
+  [FAIL] ipc_total:steady-reference   n_seeds=5  seed1: +0.005, seed2: +0.015, seed3: +0.022, seed4: -0.009, seed5: -0.006
+  [OK  ] participation_ratio:steady-reference n_seeds=5  seed1: -1.993, seed2: -2.078, seed3: -2.384, seed4: -2.182, seed5: -2.118
+
+[DBS 5pA]
+  [OK  ] ipc_total:plateau-reference  n_seeds=5  seed1: -0.087, seed2: -0.072, seed3: -0.082, seed4: -0.089, seed5: -0.049
+  [OK  ] participation_ratio:plateau-reference n_seeds=5  seed1: -41.518, seed2: -41.919, seed3: -42.012, seed4: -42.055, seed5: -23.736
+
+[SV2A (-10%)]
+  [OK  ] ipc_total:steady-reference   n_seeds=4  seed1: -0.091, seed2: -0.075, seed4: -0.097, seed5: -0.081
+  [OK  ] participation_ratio:steady-reference n_seeds=4  seed1: -41.533, seed2: -41.964, seed4: -41.864, seed5: -42.013
+
+[SV2A (-15%)]
+  [FAIL] ipc_total:steady-reference   n_seeds=5  seed1: -0.034, seed2: +0.005, seed3: -0.019, seed4: -0.027, seed5: -0.058
+  [OK  ] participation_ratio:steady-reference n_seeds=5  seed1: -2.872, seed2: -3.273, seed3: -3.280, seed4: -3.045, seed5: -22.706
+
+[benzo (k=1.0)]
+  [FAIL] ipc_total:steady-reference   n_seeds=5  seed1: -0.019, seed2: +0.002, seed3: -0.003, seed4: -0.014, seed5: +0.004
+  [OK  ] participation_ratio:steady-reference n_seeds=5  seed1: -3.028, seed2: -3.066, seed3: -3.179, seed4: -2.793, seed5: -3.388
+
+[untreated]
+  [OK  ] ipc_total:plateau-reference  n_seeds=5  seed1: -0.093, seed2: -0.076, seed3: -0.082, seed4: -0.085, seed5: -0.080
+  [OK  ] participation_ratio:plateau-reference n_seeds=5  seed1: -41.443, seed2: -42.020, seed3: -41.701, seed4: -41.712, seed5: -42.051
+
+==============================================================================
+INTERVENTION ORDERING (ipc_ref ranking, across network seeds)
+==============================================================================
+  seed1: DBS 40pA > DBS 50pA > DBS 10pA > DBS 20pA > benzo (k=1.0) > AMPA block (-15%) > SV2A (-15%) > DBS 30pA > DBS 5pA > SV2A (-10%) > AMPA block (-10%) > untreated > DBS 25pA
+  seed2: DBS 40pA > DBS 50pA > AMPA block (-15%) > SV2A (-15%) > benzo (k=1.0) > DBS 10pA > DBS 25pA > DBS 30pA > DBS 5pA > SV2A (-10%) > untreated > AMPA block (-10%) > DBS 20pA
+  seed3: DBS 40pA > DBS 50pA > benzo (k=1.0) > AMPA block (-15%) > SV2A (-15%) > DBS 25pA > DBS 30pA > DBS 20pA > DBS 10pA > DBS 5pA > untreated
+  seed4: DBS 40pA > DBS 50pA > benzo (k=1.0) > AMPA block (-15%) > SV2A (-15%) > DBS 10pA > DBS 30pA > DBS 25pA > untreated > DBS 5pA > AMPA block (-10%) > SV2A (-10%) > DBS 20pA
+  seed5: benzo (k=1.0) > DBS 40pA > DBS 50pA > DBS 20pA > DBS 5pA > DBS 10pA > AMPA block (-15%) > SV2A (-15%) > untreated > AMPA block (-10%) > SV2A (-10%) > DBS 30pA > DBS 25pA
+
+  identical ranking across all seeds: False
+  seed1_vs_seed2: kendall tau=0.487 (p=0.022, n=13)
+  seed1_vs_seed3: kendall tau=0.491 (p=0.041, n=11)
+  seed1_vs_seed4: kendall tau=0.487 (p=0.022, n=13)
+  seed1_vs_seed5: kendall tau=0.615 (p=0.003, n=13)
+  seed2_vs_seed3: kendall tau=0.745 (p=0.001, n=11)
+  seed2_vs_seed4: kendall tau=0.846 (p=0.000, n=13)
+  seed2_vs_seed5: kendall tau=0.256 (p=0.252, n=13)
+  seed3_vs_seed4: kendall tau=0.745 (p=0.001, n=11)
+  seed3_vs_seed5: kendall tau=0.345 (p=0.165, n=11)
+  seed4_vs_seed5: kendall tau=0.359 (p=0.100, n=13)
+
+summary CSV: /home/vincent/bmnn/epilepsy/seed_robustness/results/summary.csv
+raw per-job results: /home/vincent/bmnn/epilepsy/seed_robustness/results/raw/*.json
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/calibration_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/AMPA_block___10_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/AMPA_block___15_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/AMPA_block___20_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_100pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_10pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_20pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_25pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_30pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_40pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_50pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_5pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_60pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_70pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_80pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_90pA_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/SV2A__0_5x_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/SV2A___10_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/SV2A___15_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/benzo__k_1_0_traces.png
+trace plot (all seeds, sanity check): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/untreated_traces.png
+IPC summary (all conditions, every seed): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/ipc_summary.png
+IPC summary v3 (steady-state IPC, selected conditions): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/ipc_summary_v3.png
+onset-aligned plot (0-5Hz, bifurcation view): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/AMPA_block___10_onset.png
+onset-aligned plot (0-5Hz, bifurcation view): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_10pA_onset.png
+onset-aligned plot (0-5Hz, bifurcation view): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_20pA_onset.png
+onset-aligned plot (0-5Hz, bifurcation view): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/DBS_5pA_onset.png
+onset-aligned plot (0-5Hz, bifurcation view): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/SV2A___10_onset.png
+onset-aligned plot (0-5Hz, bifurcation view): /home/vincent/bmnn/epilepsy/seed_robustness/results/plots/untreated_onset.png

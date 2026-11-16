@@ -50,29 +50,32 @@ def load_calibration_traces(traces_dir):
     return traces
 
 
+_ROWS = (("rE", "E rate (Hz)"), ("rI", "I rate (Hz)"),
+        ("kA", "k_AMPA"), ("kG", "k_GABA"))
+
+
 def plot_calibration(traces, out_path):
     """All seeds' baseline (pre-drug) settling runs overlaid -- the sanity
     check that each network reaches (and holds) the ~2 Hz HSP fixed point
-    before any drug condition is applied on top of it."""
+    before any drug condition is applied on top of it. One row per signal
+    (E rate / I rate / k_AMPA / k_GABA) so seeds are the only thing distinguished
+    by color -- no solid-vs-dashed to squint at."""
     if not traces:
         return
     colors = plt.cm.tab10.colors
-    fig, (ax_rate, ax_k) = plt.subplots(2, 1, figsize=(11, 6), sharex=True)
-    for j, tr in enumerate(traces):
-        seed = int(tr["seed"])
-        color = colors[j % len(colors)]
-        t = tr["t"]
-        ax_rate.plot(t, tr["rE"], color=color, lw=0.8, label=f"seed {seed}")
-        ax_rate.plot(t, tr["rI"], color=color, lw=0.8, ls="--")
-        ax_k.plot(t, tr["kA"], color=color, lw=1.0)
-        ax_k.plot(t, tr["kG"], color=color, lw=1.0, ls="--")
-    ax_rate.axhline(2.0, color="0.4", lw=0.9, ls=":", label="target (2 Hz)")
-    ax_rate.set_ylabel("rate (Hz)")
-    ax_rate.set_title("E (solid) / I (dashed) population rate")
-    ax_rate.legend(fontsize=8, loc="upper right")
-    ax_k.set_ylabel("HSP scaling k")
-    ax_k.set_title("k_AMPA (solid) / k_GABA (dashed)")
-    ax_k.set_xlabel("time (s)")
+    fig, axes = plt.subplots(4, 1, figsize=(11, 10), sharex=True)
+    for row, (key, ylabel) in enumerate(_ROWS):
+        ax = axes[row]
+        for j, tr in enumerate(traces):
+            seed = int(tr["seed"])
+            color = colors[j % len(colors)]
+            ax.plot(tr["t"], tr[key], color=color, lw=0.9,
+                   label=f"seed {seed}" if row == 0 else None)
+        if key == "rE":
+            ax.axhline(2.0, color="0.4", lw=0.9, ls=":", label="target (2 Hz)")
+        ax.set_ylabel(ylabel)
+    axes[0].legend(fontsize=8, loc="upper right")
+    axes[-1].set_xlabel("time (s)")
     fig.suptitle("Baseline (pre-drug) settling, all seeds")
     fig.tight_layout()
     Path(out_path).parent.mkdir(parents=True, exist_ok=True)
@@ -81,26 +84,25 @@ def plot_calibration(traces, out_path):
 
 
 def plot_condition(traces_for_condition, condition_name, out_path):
+    """One row per signal (E rate / I rate / k_AMPA / k_GABA), one column per
+    frequency (burst_freq_hz, then the shared reference frequency) -- seeds
+    distinguished by color only, no solid-vs-dashed pairing to tell apart."""
     colors = plt.cm.tab10.colors
-    fig, axes = plt.subplots(2, 2, figsize=(13, 7), sharex="col")
+    fig, axes = plt.subplots(4, 2, figsize=(13, 12), sharex="col")
 
-    for i, freq_tag in enumerate(("burst", "steady")):
-        ax_rate, ax_k = axes[i, 0], axes[i, 1]
-        for j, tr in enumerate(traces_for_condition):
-            seed = int(tr["seed"])
-            color = colors[j % len(colors)]
-            t = tr[f"t_{freq_tag}"]
-            ax_rate.plot(t, tr[f"rE_{freq_tag}"], color=color, lw=1.0,
-                        label=f"seed {seed}")
-            ax_rate.plot(t, tr[f"rI_{freq_tag}"], color=color, lw=1.0, ls="--")
-            ax_k.plot(t, tr[f"kA_{freq_tag}"], color=color, lw=1.2)
-            ax_k.plot(t, tr[f"kG_{freq_tag}"], color=color, lw=1.2, ls="--")
+    for col, freq_tag in enumerate(("burst", "steady")):
         freq_hz = float(traces_for_condition[0][f"{freq_tag}_freq_hz"])
-        ax_rate.set_ylabel(f"{freq_hz:g} Hz\nrate (Hz)")
-        ax_k.set_ylabel("HSP scaling k")
-        if i == 0:
-            ax_rate.set_title("E (solid) / I (dashed) population rate")
-            ax_k.set_title("k_AMPA (solid) / k_GABA (dashed)")
+        for row, (key, ylabel) in enumerate(_ROWS):
+            ax = axes[row, col]
+            for j, tr in enumerate(traces_for_condition):
+                seed = int(tr["seed"])
+                color = colors[j % len(colors)]
+                ax.plot(tr[f"t_{freq_tag}"], tr[f"{key}_{freq_tag}"],
+                       color=color, lw=1.0,
+                       label=f"seed {seed}" if (row == 0 and col == 0) else None)
+            if row == 0:
+                ax.set_title(f"{freq_hz:g} Hz")
+            ax.set_ylabel(ylabel)
 
     axes[0, 0].legend(fontsize=8, loc="upper right")
     axes[-1, 0].set_xlabel("time (s)")
