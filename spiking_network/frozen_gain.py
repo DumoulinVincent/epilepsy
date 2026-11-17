@@ -13,6 +13,9 @@ Two kinds of jobs:
 
     python frozen_gain.py pilot        # small grid at 36 Hz, seed 1 (results/frozen_gain/pilot/)
     python frozen_gain.py full         # regime map, escape statistics, networks 2-5 (results/frozen_gain/full/)
+    python frozen_gain.py checks       # risk below 0.93, risk at 40 Hz, dt 0.5 ms (results/frozen_gain/checks/)
+    python frozen_gain.py cycle_gains  # per-cell gains snapshotted from the running cycle, then frozen
+                                       # (results/frozen_gain/cycle_gains/)
 
 Outputs: one .npz per job with rate_E, rate_I (1 s bins), the gains read back at the end, and the settings.
 """
@@ -66,9 +69,10 @@ def _build(seed, f_in, noise_scale=1.0, dt_ms=None):
 
 
 def _set_gains(net, kA, kG):
+    """Scalars: the same gains in every E cell. Arrays: one gain per E cell (a snapshot of a running cycle)."""
     P_E = net["P_E"]
-    P_E.k_AMPA_E_hsp = float(kA)
-    P_E.k_GABA_E_hsp = float(kG)
+    P_E.k_AMPA_E_hsp = kA if np.ndim(kA) else float(kA)
+    P_E.k_GABA_E_hsp = kG if np.ndim(kG) else float(kG)
 
 
 def _rates(net, i0=0):
@@ -77,13 +81,19 @@ def _rates(net, i0=0):
 
 
 def run_trial(seed, f_in, kA, kG, init, noise_seed, T, out_path, work_dir, cache_dir, stop_after_escape=None,
-              noise_scale=1.0, dt_ms=None):
+              noise_scale=1.0, dt_ms=None, gains_file=None):
     try:
         worker._isolate(work_dir, cache_dir, template_cache_dir=RESULTS / "cython_cache" / "_template")
         from brian2 import second, Hz, seed as b2seed
         from HSP_Phase import _runkw
         net = _build(seed, f_in, noise_scale, dt_ms)
-        _set_gains(net, kA, kG)
+        if gains_file:              # per-cell gains saved by run_snapshot when the E-mean k_AMPA first reached kA
+            g = np.load(gains_file)
+            i = int(np.flatnonzero(np.isclose(g["targets"], kA))[0])
+            kA_set, kG_set = g["k_AMPA"][i], g["k_GABA"][i]
+        else:
+            kA_set, kG_set = kA, kG
+        _set_gains(net, kA_set, kG_set)
         b2seed(int(noise_seed))
         kw = _runkw(net)
         n_kick = 0
@@ -110,7 +120,10 @@ def run_trial(seed, f_in, kA, kG, init, noise_seed, T, out_path, work_dir, cache
         kA_end, kG_end = np.asarray(P_E.k_AMPA_E_hsp[:]), np.asarray(P_E.k_GABA_E_hsp[:])
         meta = dict(seed=seed, f_in=f_in, kA=kA, kG=kG, init=init, noise_seed=noise_seed, T=T, kick_bins=n_kick,
                     stopped_early=bool(len(rE) - n_kick < int(T)), noise_scale=noise_scale, dt_ms=dt_ms,
-                    kA_drift=float(np.abs(kA_end - kA).max()), kG_drift=float(np.abs(kG_end - kG).max()))
+                    gains_file=gains_file, kA_mean=float(np.mean(kA_set)), kG_mean=float(np.mean(kG_set)),
+                    kA_drift=float(np.abs(kA_end - kA_set).max()), kG_drift=float(np.abs(kG_end - kG_set).max()))
+        if gains_file:
+            meta["kG"] = float(np.mean(kG_set))
         Path(out_path).parent.mkdir(parents=True, exist_ok=True)
         np.savez_compressed(out_path, rate_E=rE, rate_I=rI, meta=json.dumps(meta))
         return dict(ok=True, **meta)
@@ -226,10 +239,97 @@ def checks_jobs():
     return J
 
 
+def run_snapshot(seed, f_in, tau, targets, max_s, out_path, work_dir, cache_dir, chunk_s=10.0):
+    """HSP running (all four time constants tau, rate sensor 100 s, as in the LFP runs): save every E cell's gains the
+    first time the E-mean k_AMPA rises through each target while the network is at rest (E rate < 5 Hz in the last
+    chunk). Targets missed in one ramp (an escape came first) are taken in a later ramp, up to max_s."""
+    try:
+        worker._isolate(work_dir, cache_dir, template_cache_dir=RESULTS / "cython_cache" / "_template")
+        from brian2 import second, Hz, NeuronGroup, Synapses, StateMonitor, seed as b2seed
+        from seeded_network import build_network_seeded
+        from HSP_Phase import _runkw
+        net = build_network_seeded(50 * second, 50 * second, 50 * second, 50 * second, input_freq=f_in,
+                                   network_seed=seed)
+        net.restore("baseline", filename=str(RESULTS / "baselines" / f"seed{seed}.bri"))
+        for mon in [o for o in net.objects if isinstance(o, StateMonitor)] + [net["sp_exc"], net["sp_inh"]]:
+            net.remove(mon)
+        P_E, P_I = net["P_E"], net["P_I"]
+        for nm in worker.HSP_TAUS:
+            setattr(P_E, nm, tau * second)
+        net["inp"].rates = f_in * Hz
+        cnt = NeuronGroup(1, "n : 1", name="cnt")
+        cE = Synapses(P_E, cnt, on_pre="n_post += 1", name="cnt_E"); cE.connect(j="0")
+        cnt.run_regularly("n = 0", dt=chunk_s * second, when="end", order=1)
+        m = StateMonitor(cnt, "n", record=True, dt=chunk_s * second, when="end", order=0, name="m_cnt")
+        net.add(cnt, cE, m)
+        b2seed(5000 + int(seed))
+        kw = _runkw(net)
+        targets = list(map(float, targets))
+        got = {}
+        prev, t, kmean, rate = float(np.mean(P_E.k_AMPA_E_hsp[:])), 0.0, [], []
+        while t < max_s and len(got) < len(targets):
+            net.run(chunk_s * second, **kw)
+            t += chunk_s
+            kA = np.asarray(P_E.k_AMPA_E_hsp[:]); k = float(kA.mean())
+            r = float(np.asarray(m.n)[0, -1]) / P_E.N / chunk_s
+            kmean.append(k); rate.append(r)
+            if r < 5.0 and k > prev:
+                for x in targets:
+                    if x not in got and prev < x <= k:
+                        got[x] = (kA.copy(), np.asarray(P_E.k_GABA_E_hsp[:]).copy(), t, r)
+            prev = k
+        ok = [x for x in targets if x in got]
+        meta = dict(seed=seed, f_in=f_in, tau=tau, max_s=max_s, run_s=t, missed=[x for x in targets if x not in got],
+                    t_snap=[got[x][2] for x in ok], rate_snap=[got[x][3] for x in ok])
+        Path(out_path).parent.mkdir(parents=True, exist_ok=True)
+        np.savez_compressed(out_path, targets=np.array(ok), k_AMPA=np.array([got[x][0] for x in ok]),
+                            k_GABA=np.array([got[x][1] for x in ok]), k_mean=np.array(kmean), rate_E=np.array(rate),
+                            meta=json.dumps(meta))
+        return dict(ok=True, out=str(out_path), **meta)
+    except Exception as e:  # noqa: BLE001
+        return dict(ok=False, out=str(out_path), error=f"{e}\n{traceback.format_exc()}")
+
+
+SNAP_TARGETS = (0.92, 0.93, 0.94, 0.95, 0.96, 0.97)
+
+
+def snapshot_jobs():
+    """Step 1 of the 'cycle gains' batch: per-cell gain snapshots from the running 36 Hz cycle, networks 1-5."""
+    out = RESULTS / "frozen_gain" / "cycle_gains" / "snapshots"
+    J = []
+    for seed in (1, 2, 3, 4, 5):
+        p = out / f"s{seed}_f36_tau250.npz"
+        if not p.exists():
+            J.append(("snapshot", dict(seed=seed, f_in=36.0, tau=250.0, targets=SNAP_TARGETS, max_s=20000.0,
+                                       out_path=str(p))))
+    return J
+
+
+def cycle_gain_jobs():
+    """Step 2: escape trials from rest with the snapshot gains frozen (instead of the same k_E in every cell).
+    Network 1: every target, 20 x 1000 s; networks 2-5: 0.94 and 0.96, 10 x 1000 s."""
+    snap = RESULTS / "frozen_gain" / "cycle_gains" / "snapshots"
+    out = RESULTS / "frozen_gain" / "cycle_gains" / "trials"
+    J = []
+    for seed, ks, n in [(1, SNAP_TARGETS, 20)] + [(s, (0.94, 0.96), 10) for s in (2, 3, 4, 5)]:
+        g = snap / f"s{seed}_f36_tau250.npz"
+        have = set(np.round(np.load(g)["targets"], 3)) if g.exists() else set()
+        for kA in ks:
+            if round(kA, 3) not in have:
+                continue
+            for ns in range(100, 100 + n):
+                p = out / f"s{seed}_f36_kA{kA:.3f}_n{ns}.npz"
+                if not p.exists():
+                    J.append(("trial", dict(seed=seed, f_in=36.0, kA=float(kA), kG=1 - float(kA), init="low",
+                                            noise_seed=ns, T=1000.0, out_path=str(p), stop_after_escape=20,
+                                            gains_file=str(g))))
+    return J
+
+
 def run_jobs(J, n_jobs):
     print(f"[frozen] {len(J)} job(s)", flush=True)
     from joblib import Parallel, delayed
-    fn = dict(trial=run_trial, sweep=run_sweep)
+    fn = dict(trial=run_trial, sweep=run_sweep, snapshot=run_snapshot)
     res = Parallel(n_jobs=min(n_jobs, max(len(J), 1)), backend="loky", verbose=5)(
         delayed(fn[k])(**a, work_dir=str(RESULTS / "work" / f"frozen_{Path(a['out_path']).stem}"),
                        cache_dir=str(RESULTS / "cython_cache" / f"frozen_{Path(a['out_path']).stem}"))
@@ -271,7 +371,13 @@ def pilot(n_jobs):
 if __name__ == "__main__":
     os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
     ap = argparse.ArgumentParser()
-    ap.add_argument("what", choices=["pilot", "full", "checks"])
+    ap.add_argument("what", choices=["pilot", "full", "checks", "cycle_gains"])
     ap.add_argument("--n-jobs", type=int, default=14)
     a = ap.parse_args()
-    pilot(a.n_jobs) if a.what == "pilot" else run_jobs(full_jobs() if a.what == "full" else checks_jobs(), a.n_jobs)
+    if a.what == "pilot":
+        pilot(a.n_jobs)
+    elif a.what == "cycle_gains":           # snapshots first (they define the trials), then the trials
+        run_jobs(snapshot_jobs(), a.n_jobs)
+        run_jobs(cycle_gain_jobs(), a.n_jobs)
+    else:
+        run_jobs(full_jobs() if a.what == "full" else checks_jobs(), a.n_jobs)
