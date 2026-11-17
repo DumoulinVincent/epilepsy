@@ -39,6 +39,9 @@ def find_condition(name):
     for c in cond_mod.CYCLE_CONDITIONS:
         if c["name"] == name:
             return c
+    u = re.fullmatch(r"untreated (\d+(?:\.\d+)?)Hz", name)       # untreated at another input rate
+    if u:
+        return dict(cond_mod.make_condition(name), freq_hz=float(u.group(1)))
     m = re.fullmatch(r"DBS (\d+(?:\.\d+)?)pA", name)
     if not m:
         raise ValueError(f"unknown condition {name!r}")

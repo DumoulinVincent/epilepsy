@@ -35,8 +35,11 @@ HIGH_HZ = 10.0          # E rate above this in a 1 s bin = high-rate state (the 
 KICK_HZ, KICK_S = 100.0, 2.0
 
 
-def _build(seed, f_in):
-    """Restored, HSP-frozen network with light monitors: 1 s E/I spike counts."""
+def _build(seed, f_in, noise_scale=1.0, dt_ms=None):
+    """Restored, HSP-frozen network with light monitors: 1 s E/I spike counts.
+
+    noise_scale c: input rate f_in*c with input weight w/c, so the mean afferent drive (rate x weight) is unchanged and
+    its variance scales as 1/c (c > 1: less noise). dt_ms: integration step after the restore (default 1 ms)."""
     from brian2 import second, Hz, NeuronGroup, Synapses, StateMonitor
     from seeded_network import build_network_seeded
     from HSP_Phase import _freeze_hsp
@@ -53,7 +56,12 @@ def _build(seed, f_in):
     m = StateMonitor(cnt, "n", record=True, dt=1 * second, when="end", order=0, name="m_cnt")
     cnt.run_regularly("n = 0", dt=1 * second, when="end", order=1)
     net.add(cnt, cE, cI, m)
-    net["inp"].rates = f_in * Hz
+    net.f_eff = f_in * noise_scale * Hz
+    net["PG_E"].w[:] = np.asarray(net["PG_E"].w[:]) / noise_scale
+    net["inp"].rates = net.f_eff
+    if dt_ms:
+        from brian2 import defaultclock, ms
+        defaultclock.dt = dt_ms * ms
     return net
 
 
@@ -68,12 +76,13 @@ def _rates(net, i0=0):
     return n[0, i0:] / net["P_E"].N, n[1, i0:] / net["P_I"].N
 
 
-def run_trial(seed, f_in, kA, kG, init, noise_seed, T, out_path, work_dir, cache_dir, stop_after_escape=None):
+def run_trial(seed, f_in, kA, kG, init, noise_seed, T, out_path, work_dir, cache_dir, stop_after_escape=None,
+              noise_scale=1.0, dt_ms=None):
     try:
         worker._isolate(work_dir, cache_dir, template_cache_dir=RESULTS / "cython_cache" / "_template")
         from brian2 import second, Hz, seed as b2seed
         from HSP_Phase import _runkw
-        net = _build(seed, f_in)
+        net = _build(seed, f_in, noise_scale, dt_ms)
         _set_gains(net, kA, kG)
         b2seed(int(noise_seed))
         kw = _runkw(net)
@@ -81,7 +90,7 @@ def run_trial(seed, f_in, kA, kG, init, noise_seed, T, out_path, work_dir, cache
         if init == "high":
             net["inp"].rates = KICK_HZ * Hz
             net.run(KICK_S * second, **kw)
-            net["inp"].rates = f_in * Hz
+            net["inp"].rates = net.f_eff
             n_kick = int(KICK_S)
         if stop_after_escape is None:
             net.run(T * second, **kw)
@@ -100,7 +109,7 @@ def run_trial(seed, f_in, kA, kG, init, noise_seed, T, out_path, work_dir, cache
         P_E = net["P_E"]
         kA_end, kG_end = np.asarray(P_E.k_AMPA_E_hsp[:]), np.asarray(P_E.k_GABA_E_hsp[:])
         meta = dict(seed=seed, f_in=f_in, kA=kA, kG=kG, init=init, noise_seed=noise_seed, T=T, kick_bins=n_kick,
-                    stopped_early=bool(len(rE) - n_kick < int(T)),
+                    stopped_early=bool(len(rE) - n_kick < int(T)), noise_scale=noise_scale, dt_ms=dt_ms,
                     kA_drift=float(np.abs(kA_end - kA).max()), kG_drift=float(np.abs(kG_end - kG).max()))
         Path(out_path).parent.mkdir(parents=True, exist_ok=True)
         np.savez_compressed(out_path, rate_E=rE, rate_I=rI, meta=json.dumps(meta))
@@ -110,12 +119,12 @@ def run_trial(seed, f_in, kA, kG, init, noise_seed, T, out_path, work_dir, cache
 
 
 def run_sweep(seed, f_in, kAs, hold_s, noise_seed, out_path, work_dir, cache_dir, kG_of=lambda k: 1.0 - k,
-              kick=False):
+              kick=False, noise_scale=1.0, dt_ms=None):
     try:
         worker._isolate(work_dir, cache_dir, template_cache_dir=RESULTS / "cython_cache" / "_template")
         from brian2 import second, seed as b2seed
         from HSP_Phase import _runkw
-        net = _build(seed, f_in)
+        net = _build(seed, f_in, noise_scale, dt_ms)
         b2seed(int(noise_seed))
         kw = _runkw(net)
         n_kick = 0
@@ -124,14 +133,14 @@ def run_sweep(seed, f_in, kAs, hold_s, noise_seed, out_path, work_dir, cache_dir
             _set_gains(net, kAs[0], kG_of(kAs[0]))
             net["inp"].rates = KICK_HZ * Hz
             net.run(KICK_S * second, **kw)
-            net["inp"].rates = f_in * Hz
+            net["inp"].rates = net.f_eff
             n_kick = int(KICK_S)
         for kA in kAs:
             _set_gains(net, kA, kG_of(kA))
             net.run(hold_s * second, **kw)
         rE, rI = _rates(net)
         meta = dict(seed=seed, f_in=f_in, kAs=list(map(float, kAs)), hold_s=hold_s, noise_seed=noise_seed,
-                    kick_bins=n_kick)
+                    kick_bins=n_kick, noise_scale=noise_scale, dt_ms=dt_ms)
         Path(out_path).parent.mkdir(parents=True, exist_ok=True)
         np.savez_compressed(out_path, rate_E=rE, rate_I=rI, meta=json.dumps(meta))
         return dict(ok=True, **{k: v for k, v in meta.items() if k != "kAs"})
@@ -181,6 +190,42 @@ def full_jobs():
     return J
 
 
+def checks_jobs():
+    """Follow-up batch: risk below k_E 0.93 (36 Hz), risk near the 40 Hz fixed point, input noise at fixed mean drive,
+    and a 0.5 ms time step."""
+    out = RESULTS / "frozen_gain" / "checks"
+    J = []
+
+    def trial(tag, f, kA, ns, T, **kw):
+        p = out / tag / f"s1_f{f:g}_kA{kA:.3f}_n{ns}.npz"
+        if not p.exists():
+            J.append(("trial", dict(seed=1, f_in=float(f), kA=float(kA), kG=1 - float(kA), init="low", noise_seed=ns,
+                                    T=T, out_path=str(p), stop_after_escape=20, **kw)))
+
+    def sweep(tag, f, kAs, ns, direction, **kw):
+        p = out / tag / f"s1_f{f:g}_{direction}_n{ns}.npz"
+        if not p.exists():
+            J.append(("sweep", dict(seed=1, f_in=float(f), kAs=kAs, hold_s=50.0, noise_seed=ns,
+                                    kick=direction.startswith("down"), out_path=str(p), **kw)))
+
+    for kA in (0.80, 0.85, 0.88, 0.90, 0.92):                          # 1. risk below 0.93 at 36 Hz
+        for ns in range(100, 120):
+            trial("risk36_low", 36, kA, ns, 1000.0)
+    for kA in (0.77, 0.80, 0.83, 0.85):                                # 2. risk near the healthy fixed point
+        for ns in range(100, 110):
+            trial("risk40", 40, kA, ns, 1000.0)
+    fine = np.round(np.arange(0.60, 1.0001, 0.01), 3)
+    # 4. input noise at fixed mean drive: NOT run. Rescaling rate x weight at constant product moves the operating
+    #    point itself (rest at 0.1 Hz for c = 2, immediate escape for c = 0.5 at k_E = 0.90), because rest firing is
+    #    fluctuation-driven; a fair test needs the mean adjusted to keep the rest rate fixed.
+    for kA in (0.95, 0.97, 0.99):                                      # 5. time step 0.5 ms
+        for ns in range(100, 110):
+            trial("dt05", 36, kA, ns, 1000.0, dt_ms=0.5)
+    sweep("dt05", 36, fine, 41, "upfine", dt_ms=0.5)
+    sweep("dt05", 36, fine[::-1], 41, "downfine", dt_ms=0.5)
+    return J
+
+
 def run_jobs(J, n_jobs):
     print(f"[frozen] {len(J)} job(s)", flush=True)
     from joblib import Parallel, delayed
@@ -226,7 +271,7 @@ def pilot(n_jobs):
 if __name__ == "__main__":
     os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
     ap = argparse.ArgumentParser()
-    ap.add_argument("what", choices=["pilot", "full"])
+    ap.add_argument("what", choices=["pilot", "full", "checks"])
     ap.add_argument("--n-jobs", type=int, default=14)
     a = ap.parse_args()
-    pilot(a.n_jobs) if a.what == "pilot" else run_jobs(full_jobs(), a.n_jobs)
+    pilot(a.n_jobs) if a.what == "pilot" else run_jobs(full_jobs() if a.what == "full" else checks_jobs(), a.n_jobs)
