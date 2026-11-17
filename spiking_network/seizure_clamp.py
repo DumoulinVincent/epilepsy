@@ -39,7 +39,7 @@ WARM_S = 300.0
 
 
 def run_clamp(seed, f_in, tau, D, k_start, run_s, noise_seed, out_path, work_dir, cache_dir, gains=None,
-              save_every=5000.0):
+              save_every=5000.0, tau_hsp=100.0):
     try:
         worker._isolate(work_dir, cache_dir, template_cache_dir=RESULTS / "cython_cache" / "_template")
         from brian2 import (second, mV, Hz, NeuronGroup, Synapses, StateMonitor, network_operation,
@@ -87,13 +87,20 @@ def run_clamp(seed, f_in, tau, D, k_start, run_s, noise_seed, out_path, work_dir
         b2seed(int(noise_seed))
         kw = _runkw(net)
         _freeze_hsp(net)
+        st["on"] = True                                      # clamp active in the warm-up too (negative times)
         net.run(WARM_S * second, **kw)                       # rate sensors settle on the snapshot gains
         for nm in worker.HSP_TAUS:
             setattr(P_E, nm, tau * second)
+        if tau_hsp != 100.0:
+            # slower rate sensor (seeded_network.tau_HSP, 100 s, read from the namespace); x_spike rescaled so that
+            # r_est = x_spike / tau_HSP is continuous at the switch (as in long_tau_cycle.py)
+            kw["namespace"] = dict(kw["namespace"], tau_HSP=tau_hsp * second)
+            P_E.x_spike = P_E.x_spike[:] * (tau_hsp / 100.0)
+            P_I.x_spike = P_I.x_spike[:] * (tau_hsp / 100.0)
         st["on"] = True
         t0 = float(net.t / second)
         meta = dict(seed=seed, f_in=f_in, tau=tau, D=D, k_start=k_start, run_s=run_s, noise_seed=noise_seed,
-                    warm_s=WARM_S, t0=t0)
+                    warm_s=WARM_S, t0=t0, tau_hsp=tau_hsp)
         Path(out_path).parent.mkdir(parents=True, exist_ok=True)
 
         def save(done):                 # rewritten after every segment, so a crash keeps what was simulated
@@ -120,19 +127,21 @@ def _complete(p):
 
 def jobs(stage, run_s):
     """first: start at k_E 0.92 (below the risk zone), tau 2500 s (D 10 s) and 25000 s (D 10, 30 s), 50000 s.
-    inzone: start inside the risk zone, tau 25000 s from 0.95 and 0.96 and tau 10000 s from 0.95, D 10 s, 100000 s."""
+    inzone: start inside the risk zone (0.95), D 10 s, 100000 s, rate sensor slowed with the gains (tau_hsp = tau/10):
+        tau 25000 s / sensor 2500 s, tau 10000 s / sensor 1000 s, and tau 25000 s with the default 100 s sensor."""
     out = RESULTS / "seizure_clamp" / "raw"
     if stage == "first":
-        grid = [(2500.0, 10, 0.92), (25000.0, 10, 0.92), (25000.0, 30, 0.92)]
+        grid = [(2500.0, 10, 0.92, 100.0), (25000.0, 10, 0.92, 100.0), (25000.0, 30, 0.92, 100.0)]
     else:
-        grid = [(25000.0, 10, 0.95), (25000.0, 10, 0.96), (10000.0, 10, 0.95)]
+        grid = [(25000.0, 10, 0.95, 2500.0), (10000.0, 10, 0.95, 1000.0), (25000.0, 10, 0.95, 100.0)]
     J = []
-    for tau, D, k0 in grid:
+    for tau, D, k0, th in grid:
         for seed in (1, 2, 3, 4, 5):
-            p = out / f"s{seed}_f36_tau{tau:g}_D{D}_k{k0:.2f}_{run_s:g}s.npz"
+            sens = "" if th == 100.0 else f"_sensor{th:g}"
+            p = out / f"s{seed}_f36_tau{tau:g}{sens}_D{D}_k{k0:.2f}_{run_s:g}s.npz"
             if not _complete(p):
                 J.append(dict(seed=seed, f_in=36.0, tau=tau, D=D, k_start=k0, run_s=run_s, noise_seed=700 + seed,
-                              out_path=str(p)))
+                              out_path=str(p), tau_hsp=th))
     return J
 
 
