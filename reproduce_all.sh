@@ -15,7 +15,9 @@
 #   sweep       input-rate sweep, 32-42 Hz, HSP tau 50 s, 5000 s each (Fig. 2)                  ~0.5 h
 #   long38      38 Hz with HSP running, tau 50 s, 5 seeds x 30000 s                              ~1.5 h
 #   frozen      frozen-gain analysis: pilot, regime map + risk (full), checks, per-cell gains  ~5 h
-#   clamp       seizure clamp: below / inside the risk zone, and from deafferentation          ~35 h
+#   deaff       seizure clamp from deafferentation, 10 runs of 250 000-500 000 s; runs in the  ~25 h
+#               background next to the other stages (it only needs the baselines)
+#   clamp       seizure clamp from per-cell gains, below and inside the risk zone             ~10 h
 #   epileptor   HSP -> Epileptor x0 mapping notebook (needs lfp)                               ~15 min
 #   outputs     every paper figure (figures/out/), results report and Epileptor report         minutes
 #
@@ -33,7 +35,7 @@ by_mem() { local n=$(( MEM_GB * 10 / $1 )); local c=$(( CORES > 1 ? CORES - 1 : 
 N_JOBS="${N_JOBS:-$(by_mem 6)}"            # light jobs, ~0.6 GB
 N_HEAVY="${N_HEAVY:-$(by_mem 14)}"         # LFP / image jobs, ~1.3 GB (+ margin)
 export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1   # one thread per job (after detection)
-STAGES=("$@"); [ ${#STAGES[@]} -eq 0 ] && STAGES=(baselines lfp image slow sweep long38 frozen clamp epileptor outputs)
+STAGES=("$@"); [ ${#STAGES[@]} -eq 0 ] && STAGES=(baselines deaff lfp image slow sweep long38 frozen clamp epileptor outputs)
 say() { echo; echo "==== $(date '+%F %T')  $*"; }
 say "machine: $CORES cores, $MEM_GB GB RAM -> $N_JOBS parallel jobs ($N_HEAVY for LFP/image)"
 
@@ -96,7 +98,11 @@ stage_clamp() {
     cd "$SN"
     python -u seizure_clamp.py first --n-jobs "$N_JOBS"
     python -u seizure_clamp.py inzone --n-jobs "$N_JOBS"
-    python -u seizure_clamp.py deaff --n-jobs "$N_JOBS"       # resumable: rerun to continue from checkpoints
+}
+
+stage_deaff() {
+    # the longest runs (single runs of 250 000-500 000 s that cannot be split); resumable from checkpoints
+    cd "$SN" && python -u seizure_clamp.py deaff --n-jobs "${N_DEAFF:-$N_JOBS}"
 }
 
 stage_epileptor() {
@@ -116,9 +122,31 @@ stage_outputs() {
     fi
 }
 
+# The deaff stage (the longest single runs) runs in the background, alongside the other stages, on its own share of
+# the jobs (N_DEAFF, default: 10 runs or half the jobs); the outputs stage waits for it.
+DEAFF_PID=""
+wait_deaff() {
+    if [ -n "$DEAFF_PID" ]; then
+        say "waiting for the deafferentation clamp runs (log: spiking_network/results/deaff_stage.log)"
+        wait "$DEAFF_PID" || { echo "deaff stage failed, see spiking_network/results/deaff_stage.log"; exit 1; }
+        DEAFF_PID=""
+    fi
+}
 for s in "${STAGES[@]}"; do
     declare -F "stage_$s" > /dev/null || { echo "unknown stage: $s"; exit 1; }
+    if [ "$s" = deaff ] && [ ${#STAGES[@]} -gt 1 ]; then
+        N_DEAFF="${N_DEAFF:-$(( N_JOBS / 2 < 10 ? (N_JOBS / 2 > 0 ? N_JOBS / 2 : 1) : 10 ))}"
+        say "stage deaff in the background on $N_DEAFF jobs (log: spiking_network/results/deaff_stage.log)"
+        mkdir -p "$SN/results"
+        ( N_DEAFF=$N_DEAFF stage_deaff ) > "$SN/results/deaff_stage.log" 2>&1 &
+        DEAFF_PID=$!
+        N_JOBS=$(( N_JOBS - N_DEAFF > 0 ? N_JOBS - N_DEAFF : 1 )); N_HEAVY=$(( N_HEAVY < N_JOBS ? N_HEAVY : N_JOBS ))
+        say "other stages: $N_JOBS parallel jobs ($N_HEAVY for LFP/image)"
+        continue
+    fi
+    [ "$s" = outputs ] && wait_deaff
     say "stage $s"
     "stage_$s"
 done
+wait_deaff
 say "done"

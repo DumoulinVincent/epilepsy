@@ -43,6 +43,17 @@ On Linux or macOS (Intel or Apple Silicon), from the repository root:
 ./reproduce_all.sh    # every simulation, analysis and figure, in order
 ```
 
+**Windows:** double-click `run_windows.bat` (it runs everything inside WSL, installing what is missing; set
+`N_JOBS` at the top of the file). If WSL is not installed yet: `wsl --install` in an administrator PowerShell,
+reboot, open Ubuntu once, then double-click again.
+
+**Resources.** Disk: about 15 GB in total (raw runs ~9 GB, compiled-code caches ~4 GB); keep 25 GB free. Memory:
+~1.3 GB per LFP/image job, ~0.6 GB otherwise. Cores: the network is small (125 neurons) and fits in each core's cache,
+so throughput scales almost linearly with the number of jobs, hyperthreads included (with less gain per thread);
+leave one or two cores for other work. The total time is bounded below by the longest single runs (seizure clamp from
+deafferentation, 500 000 s of model time each, about a day on one core), which therefore start right after the
+baselines and run alongside the other stages.
+
 `setup.sh` tells you what to install if something is missing (macOS: `brew install python@3.12`,
 `xcode-select --install`; Ubuntu/Debian: `sudo apt install python3.12 python3.12-venv python3.12-dev
 build-essential`). A LaTeX distribution (`pdflatex`) is optional: without it the PDF reports are skipped, the figures
@@ -55,7 +66,7 @@ parallel (all cores but one, limited by memory: ~1.3 GB per LFP/image job, ~0.6 
 full checkpoint every 10 000 s of model time, so **after an interruption (reboot, update), run the same command again**:
 finished runs are skipped and unfinished ones continue from their last checkpoint.
 
-**Runtime: about 2.5 days on a 16-core machine** (baselines ~1 h, LFP ~7 h, image task ~12 h, slow-HSP runs ~4 h,
+**Runtime: about 2.5 days of computing on a 16-core machine (wall time ~1.5 days with the long runs in parallel)** (baselines ~1 h, LFP ~7 h, image task ~12 h, slow-HSP runs ~4 h,
 input sweep and 38 Hz runs ~2 h, frozen-gain analysis ~5 h, seizure clamp ~35 h, of which ~25 h for the runs from
 deafferentation). It scales roughly with the number of cores.
 

@@ -9,6 +9,19 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$ROOT"
 OS="$(uname)"
 
+# Ubuntu/Debian (also WSL on Windows): install the system packages if something is missing (asks for your password)
+if [ "$OS" = Linux ] && command -v apt-get > /dev/null; then
+    need=0
+    command -v python3.12 > /dev/null || need=1
+    command -v gcc > /dev/null || need=1
+    command -v git > /dev/null || need=1
+    command -v python3.12 > /dev/null && ! python3.12 -c "import ensurepip" 2> /dev/null && need=1
+    if [ $need = 1 ]; then
+        echo "Installing system packages: python3.12, venv, headers, compiler, git (sudo)..."
+        sudo apt-get update && sudo apt-get install -y python3.12 python3.12-venv python3.12-dev build-essential git
+    fi
+fi
+
 PY="${PYTHON:-}"
 if [ -z "$PY" ]; then
     for c in python3.12 python3; do
