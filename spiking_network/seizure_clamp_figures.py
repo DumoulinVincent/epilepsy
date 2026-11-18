@@ -80,7 +80,7 @@ def inzone():
     e = fig.add_subplot(gs[2, 2]); e.axis("off")
     e.text(0, 1, "Slow sensor: a lone 10 s seizure raises the\nrate estimate by ~1.2 Hz, staying below the\n"
                  "3 Hz internalization threshold: k$_E$ drops\n~0.0003. Two seizures < 1 h apart add up\n"
-                 "above 3 Hz: k$_E$ drops 0.005-0.013.\nFast sensor: every seizure is felt (-0.010).",
+                 "above 3 Hz: k$_E$ drops 0.003-0.013.\nFast sensor: every seizure is felt (-0.010).",
            va="top", fontsize=8.5)
     fig.savefig(OUT / "clamp_inzone.png", dpi=150, bbox_inches="tight")
 
