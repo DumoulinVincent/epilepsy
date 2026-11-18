@@ -241,5 +241,93 @@ def main():
     print("40 Hz HSP k_E", R[40], " 36 Hz range", R[36], " 38 Hz onsets", np.round(sorted(on38), 3))
 
 
+
+
+# ----------------------------------------------------------------------------------------------- per-cell cycle gains
+def _cycle_trials():
+    T = defaultdict(list)
+    for p in sorted((HERE / "results" / "frozen_gain" / "cycle_gains" / "trials").glob("*.npz")):
+        z = np.load(p); m = json.loads(str(z["meta"])); r = z["rate_E"][m["kick_bins"]:]
+        hi = np.flatnonzero(r > HIGH)
+        T[(m["seed"], round(m["kA"], 3))].append((float(hi[0]) if len(hi) else np.inf, m["T"]))
+    return T
+
+
+def _hazard(v):
+    return sum(e < np.inf for e, _ in v) / sum(min(e, t) for e, t in v)
+
+
+def _integrated_hazard(H):
+    """Time-rescaling test: integrated hazard H(k_E(t)) from the end of each untreated episode (tau 250 s runs) to the
+    next onset. If H predicts onsets, the values are Exp(1) distributed (mean 1)."""
+    L = []
+    for p in sorted((HERE / "results" / "lfp_tau250_15k" / "raw").glob("seed*_untreated.npz")):
+        z = np.load(p); t, k, r, tr = z["t_k"], z["k_AMPA"], z["rate_E"], z["rate_t"]
+        hi = r > HIGH; on = tr[np.flatnonzero(hi & ~np.r_[False, hi[:-1]])]; prev = t[0]
+        for o in on:
+            seg = (t >= prev) & (t < o); kk = k[seg]; i0 = np.argmin(kk); tt = t[seg][i0:]; kk = kk[i0:]
+            L.append(np.sum(H(kk) * np.diff(tt, append=o)))
+            after = np.flatnonzero((tr > o) & (r < 5)); prev = tr[after[0]] if len(after) else o
+    return np.array(L)
+
+
+def cycle_gains_figure():
+    U = trials(); Cy = _cycle_trials()
+    g1 = np.load(HERE / "results" / "frozen_gain" / "cycle_gains" / "snapshots" / "s1_f36_tau250.npz")
+    fig, ax = plt.subplots(1, 3, figsize=(13, 3.9), gridspec_kw=dict(wspace=0.33))
+    # (a) per-cell gains
+    a = ax[0]
+    for tgt, col in ((0.92, BLUE), (0.97, RED)):
+        i = int(np.flatnonzero(np.isclose(g1["targets"], tgt))[0]); kk = g1["k_AMPA"][i]
+        a.hist(kk, bins=np.linspace(0.75, 1.0, 26), color=col, alpha=0.55,
+               label=f"mean {tgt:.2f}: SD {kk.std():.3f}, range {kk.min():.2f}-{kk.max():.2f}")
+        a.axvline(tgt, color=col, ls="--", lw=1)
+    a.set_xlabel("$k_{AMPA}$ of each E cell"); a.set_ylabel("cells")
+    a.set_title("(a) Gains during the cycle (network 1)", loc="left")
+    a.legend(frameon=False, fontsize=7.5, loc="upper left")
+    # (b) risk: uniform vs cycle gains
+    b = ax[1]
+    ku = sorted(k for (s, f, k, dt) in U if s == 1 and f == 36.0 and dt == 1.0 and k <= 0.99)
+    p = np.array([wilson(sum(e <= 1000 for e, _ in U[(1, 36.0, k, 1.0)]), len(U[(1, 36.0, k, 1.0)])) for k in ku])
+    b.plot(ku, p[:, 0], "o-", color=GREY, ms=4, label="same $k_E$ in every cell")
+    b.fill_between(ku, p[:, 1], p[:, 2], color=GREY, alpha=0.15, lw=0)
+    kc = sorted(k for (s, k) in Cy if s == 1)
+    p = np.array([wilson(sum(e <= 1000 for e, _ in Cy[(1, k)]), len(Cy[(1, k)])) for k in kc])
+    b.plot(kc, p[:, 0], "o-", color=ORANGE, ms=4, lw=1.8, label="per-cell gains of the cycle")
+    b.fill_between(kc, p[:, 1], p[:, 2], color=ORANGE, alpha=0.15, lw=0)
+    for s in range(2, 6):
+        kk = sorted(k for (ss, k) in Cy if ss == s)
+        b.plot(kk, [np.mean([e <= 1000 for e, _ in Cy[(s, k)]]) for k in kk], "x", color=ORANGE, ms=6,
+               label="networks 2-5 (cycle gains)" if s == 2 else None)
+    b.set_xlim(0.875, 0.995); b.set_ylim(-0.03, 1.03)
+    b.set_xlabel("mean $k_E$ (frozen)"); b.set_ylabel("$R_{1000}$ = P(escape within 1000 s)")
+    b.set_title("(b) Risk at 36 Hz (20 runs per point)", loc="left")
+    b.legend(frameon=False, fontsize=7.5, loc="upper left")
+    # (c) integrated hazard to each onset
+    c = ax[2]
+    ku_all = sorted(k for (s, f, k, dt) in U if s == 1 and f == 36.0 and dt == 1.0)
+    hu = np.array([_hazard(U[(1, 36.0, k, 1.0)]) for k in ku_all])
+    lh = np.log(np.maximum(hu, 1e-12))
+    Hu = lambda k: np.where(k < 0.91, 0, np.exp(np.interp(k, ku_all, lh)))  # noqa: E731
+    kf = np.array([0.95, 0.96, 0.97]); hf = np.array([_hazard(Cy[(1, k)]) for k in kf])
+    bb, aa = np.polyfit(kf, np.log(hf), 1)
+    Hc = lambda k: np.where(k < 0.945, 0, np.exp(aa + bb * k))  # noqa: E731
+    xs = np.linspace(0, 9, 200)
+    c.plot(xs, 1 - np.exp(-xs), color=INK, lw=1, ls="--", label="expected if the risk predicts onsets")
+    for L, col, lab in ((_integrated_hazard(Hu), GREY, "same $k_E$ in every cell"),
+                        (_integrated_hazard(Hc), ORANGE, "per-cell gains of the cycle")):
+        Ls = np.sort(L)
+        c.step(Ls, np.arange(1, len(Ls) + 1) / len(Ls), where="post", color=col, lw=1.8,
+               label=f"{lab}: mean {L.mean():.2f}")
+    c.set_xlabel("accumulated risk, reset to onset")
+    c.set_ylabel("fraction of episodes (12)")
+    c.set_title("(c) Does frozen risk predict onsets?", loc="left")
+    c.legend(frameon=False, fontsize=7.5, loc="lower right")
+    fig.savefig(OUT / "cycle_gains.png", dpi=170, bbox_inches="tight")
+    fig.savefig(OUT / "cycle_gains.pdf", bbox_inches="tight")
+    print("wrote", OUT / "cycle_gains.png")
+
+
 if __name__ == "__main__":
     main()
+    cycle_gains_figure()
