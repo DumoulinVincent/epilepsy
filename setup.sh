@@ -9,44 +9,50 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$ROOT"
 OS="$(uname)"
 
-# Ubuntu/Debian (also WSL on Windows): install the system packages if something is missing (asks for your password)
+# System tools: a C compiler (Brian2 compiles the network), git and curl. On Ubuntu/Debian (also WSL on Windows) they
+# are installed if missing (asks for your password); Python itself is NOT taken from apt (see below).
 if [ "$OS" = Linux ] && command -v apt-get > /dev/null; then
-    need=0
-    command -v python3.12 > /dev/null || need=1
-    command -v gcc > /dev/null || need=1
-    command -v git > /dev/null || need=1
-    command -v python3.12 > /dev/null && ! python3.12 -c "import ensurepip" 2> /dev/null && need=1
-    if [ $need = 1 ]; then
-        echo "Installing system packages: python3.12, venv, headers, compiler, git (sudo)..."
-        sudo apt-get update && sudo apt-get install -y python3.12 python3.12-venv python3.12-dev build-essential git
+    if ! command -v gcc > /dev/null || ! command -v git > /dev/null || ! command -v curl > /dev/null; then
+        echo "Installing system packages: compiler, git, curl (sudo)..."
+        sudo apt-get update && sudo apt-get install -y build-essential git curl
     fi
 fi
-
-PY="${PYTHON:-}"
-if [ -z "$PY" ]; then
-    for c in python3.12 python3; do
-        if command -v "$c" > /dev/null && "$c" -c 'import sys; sys.exit(sys.version_info[:2] != (3, 12))'; then PY="$c"; break; fi
-    done
-fi
-if [ -z "$PY" ]; then
-    echo "Python 3.12 not found."
-    [ "$OS" = Darwin ] && echo "  macOS: brew install python@3.12   (then rerun ./setup.sh)" \
-                       || echo "  Ubuntu/Debian: sudo apt install python3.12 python3.12-venv python3.12-dev"
-    exit 1
-fi
-echo "Python: $($PY --version) ($PY)"
-
 if ! command -v cc > /dev/null && ! command -v gcc > /dev/null && ! command -v clang > /dev/null; then
     echo "No C compiler found (Brian2 compiles the network)."
-    [ "$OS" = Darwin ] && echo "  macOS: xcode-select --install" || echo "  Ubuntu/Debian: sudo apt install build-essential"
+    [ "$OS" = Darwin ] && echo "  macOS: xcode-select --install" || echo "  install gcc (e.g. build-essential)"
     exit 1
 fi
 
-[ -d venv ] || "$PY" -m venv venv
-# shellcheck disable=SC1091
-source venv/bin/activate
-python -m pip install --upgrade pip > /dev/null
-python -m pip install -r requirements.txt
+# Python 3.12 (the pinned packages need it). Use the system's python3.12 if it has venv support; otherwise (e.g.
+# Ubuntu 26.04, which only ships newer Pythons) uv downloads a standalone Python 3.12 into the user's home, no root.
+PY="${PYTHON:-}"
+if [ -z "$PY" ] && [ "${USE_UV:-0}" != 1 ]; then
+    for c in python3.12 python3; do
+        if command -v "$c" > /dev/null && "$c" -c 'import sys, ensurepip; sys.exit(sys.version_info[:2] != (3, 12))' 2> /dev/null; then
+            PY="$c"; break
+        fi
+    done
+fi
+
+if [ -n "$PY" ]; then
+    echo "Python: $($PY --version) ($PY)"
+    [ -d venv ] || "$PY" -m venv venv
+    # shellcheck disable=SC1091
+    source venv/bin/activate
+    python -m pip install --upgrade pip > /dev/null
+    python -m pip install -r requirements.txt
+else
+    if ! command -v uv > /dev/null; then
+        echo "No Python 3.12 on this system: installing uv to fetch one (https://astral.sh/uv)..."
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        export PATH="${UV_INSTALL_DIR:-$HOME/.local/bin}:$PATH"
+    fi
+    [ -d venv ] || uv venv --python 3.12 --python-preference only-managed venv
+    # shellcheck disable=SC1091
+    source venv/bin/activate
+    echo "Python: $(python --version) (uv-managed)"
+    uv pip install -r requirements.txt
+fi
 
 echo "Testing Brian2 + Cython compilation..."
 python - <<'PY'

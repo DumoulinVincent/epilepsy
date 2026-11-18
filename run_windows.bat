@@ -13,7 +13,7 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-wsl.exe bash -lc "cd ~ && ( [ -d epilepsy ] || git clone https://github.com/DumoulinVincent/epilepsy.git ) && cd epilepsy && git pull --ff-only; ./setup.sh && N_JOBS=%N_JOBS% N_HEAVY=%N_JOBS% ./reproduce_all.sh 2>&1 | tee -a reproduce.log"
+wsl.exe bash -lc "cd ~ && ( [ -d epilepsy ] || git clone https://github.com/DumoulinVincent/epilepsy.git ) && cd epilepsy && git fetch origin && git reset --hard origin/main && ./setup.sh && N_JOBS=%N_JOBS% N_HEAVY=%N_JOBS% ./reproduce_all.sh 2>&1 | tee -a reproduce.log"
 echo.
 echo Finished (or stopped). Log: reproduce.log in the epilepsy folder.
 pause
