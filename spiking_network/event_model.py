@@ -36,16 +36,13 @@ def _sig(x):
 
 
 @njit(cache=True)
-def simulate(T, tau_up, tau_dn, tau_s, D, k0, kG0, r0, seed, ktab, rtab, ha, hb, rec_every=10, dk_post=0.0,
-             tau_post=1800.0):
-    """1 s steps. Returns (k_E every rec_every s, onset times, seizure end times).
-    dk_post, tau_post: short-term post-seizure excitability (e.g. chloride loading weakening GABA): each seizure end adds
-    dk_post to the k_E seen by the hazard, decaying with tau_post (0 = HSP only)."""
+def simulate(T, tau_up, tau_dn, tau_s, D, k0, kG0, r0, seed, ktab, rtab, ha, hb, rec_every=10):
+    """1 s steps. Returns (k_E every rec_every s, onset times, seizure end times)."""
     np.random.seed(seed)
     kA, kG, rh = k0, kG0, r0
     n_rec = (T + rec_every - 1) // rec_every
     krec = np.empty(n_rec); ons = np.empty(200000); ends = np.empty(200000)
-    n_on = 0; n_end = 0; seizing = False; left = 0; u = 0.0
+    n_on = 0; n_end = 0; seizing = False; left = 0
     for t in range(T):
         if t % rec_every == 0:
             krec[t // rec_every] = kA
@@ -59,18 +56,16 @@ def simulate(T, tau_up, tau_dn, tau_s, D, k0, kG0, r0, seed, ktab, rtab, ha, hb,
                 seizing = False
             if not seizing:
                 ends[n_end] = t; n_end += 1
-                u += dk_post
         else:
             r = 0.85 + 0.45 * kA
-            h = np.exp(ha + hb * (kA + u))
-            if kA + u >= 0.985 or h > 0.05:
+            h = np.exp(ha + hb * kA)
+            if kA >= 0.985 or h > 0.05:
                 h = 0.05
             if np.random.random() < 1.0 - np.exp(-h):
                 seizing = True; left = D
                 ons[n_on] = t; n_on += 1
                 r = np.interp(kA, ktab, rtab)
         rh = r + (rh - r) * np.exp(-1.0 / tau_s)
-        u *= np.exp(-1.0 / tau_post)
         gu = _sig(15.0 * ((2.0 - rh) / 2.0 - 0.5))
         gd = _sig(15.0 * ((rh - 2.0) / 2.0 - 0.5))
         kA += (1.0 - kA) * gu / tau_up - kA * gd / tau_dn
@@ -78,9 +73,8 @@ def simulate(T, tau_up, tau_dn, tau_s, D, k0, kG0, r0, seed, ktab, rtab, ha, hb,
     return krec, ons[:n_on], ends[:n_end]
 
 
-def run(T, tau_up, tau_dn, tau_s, D, k0=0.75, kG0=0.21, r0=2.0, seed=0, dk_post=0.0, tau_post=1800.0):
-    return simulate(int(T), float(tau_up), float(tau_dn), float(tau_s), int(D), k0, kG0, r0, seed, KTAB, RTAB, HA, HB,
-                    10, float(dk_post), float(tau_post))
+def run(T, tau_up, tau_dn, tau_s, D, k0=0.75, kG0=0.21, r0=2.0, seed=0):
+    return simulate(int(T), float(tau_up), float(tau_dn), float(tau_s), int(D), k0, kG0, r0, seed, KTAB, RTAB, HA, HB)
 
 
 def clusters(ons, gap):
