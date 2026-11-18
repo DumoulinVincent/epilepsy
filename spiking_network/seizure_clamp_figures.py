@@ -2,6 +2,7 @@
 
     python seizure_clamp_figures.py     # -> results/seizure_clamp/figures/clamp_{overview,inzone}.png
 
+deaff:    from deafferentation (40 -> 36 Hz), resumable long runs; plotted from whatever exists.
 overview: start at k_E 0.92, 50000 s (tau 2500 s; tau 25000 s with D 10 and 30 s), fast (100 s) rate sensor.
 inzone:   start at k_E 0.95, 100000 s: (a) tau 25000 s, sensor 2500 s; (b) tau 25000 s, sensor 100 s;
           (c) tau 10000 s, sensor 1000 s; (d) drop in k_E after each seizure against the time to the nearest other one.
@@ -85,7 +86,33 @@ def inzone():
     fig.savefig(OUT / "clamp_inzone.png", dpi=150, bbox_inches="tight")
 
 
+def deaff():
+    """Seizure clamp from deafferentation (seizure_clamp.py deaff): k_E and onsets per network and setting. Uses whatever
+    has been simulated so far (runs keep partial results)."""
+    d = HERE / "results" / "seizure_clamp" / "deaff"
+    sets = sorted({p.name.split("_", 1)[1] for p in d.glob("s*_up*.npz")})
+    if not sets:
+        print("no deafferentation clamp runs yet"); return
+    fig, ax = plt.subplots(len(sets), 1, figsize=(12, 3.2 * len(sets)), squeeze=False)
+    for a, tag in zip(ax[:, 0], sets):
+        for s, col in zip(range(1, 6), COLS):
+            p = d / f"s{s}_{tag}"
+            if not p.exists():
+                continue
+            z = np.load(p); r, t = z["rate_E"], z["rate_t"]; w = t >= 0; r, t = r[w], t[w]; hi = r > 10
+            on = t[np.flatnonzero(hi & ~np.r_[False, hi[:-1]])]
+            a.plot(z["t_k"] / 3600, z["k_AMPA"], color=col, lw=1.1, label=f"network {s}")
+            a.plot(on / 3600, np.interp(on, z["t_k"], z["k_AMPA"]), "v", color=RED, ms=6, mec="k", mew=0.4)
+        a.axhspan(0.945, 0.99, color=RED, alpha=0.06, lw=0); a.set_ylim(0.72, 0.99); a.set_ylabel("$k_E$")
+        a.set_title(f"From deafferentation, seizures ended after 10 s: {tag.replace('_', ' ').replace('.npz', '')}",
+                    loc="left", fontsize=9.5)
+        a.legend(frameon=False, ncol=5, fontsize=7.5, loc="lower right")
+    ax[-1, 0].set_xlabel("time after deafferentation (h, model)")
+    fig.savefig(OUT / "clamp_deaff.png", dpi=150, bbox_inches="tight")
+    print("wrote", OUT / "clamp_deaff.png")
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
-    overview(); inzone()
+    overview(); inzone(); deaff()
     print("wrote", OUT)

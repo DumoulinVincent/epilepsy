@@ -7,6 +7,9 @@ scipy==1.12.0
 pandas==2.2.3
 matplotlib==3.10.9
 joblib==1.5.3
+scikit-learn==1.8.0
+numba==0.68.0
+llvmlite==0.50.0
 jupyter==1.1.1
 nbconvert==7.16.6
 ipykernel==6.29.5

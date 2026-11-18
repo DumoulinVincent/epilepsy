@@ -127,8 +127,9 @@ def fig_lfp_dose(S, path):
 # ---------------------------------------------------------------- image data
 def image_data():
     a = pd.read_csv(RES / "image_random_c16/analysis/summary.csv")
-    b = pd.read_csv(RES / "image_c16_dbs300/analysis/summary.csv")
-    if "DBS 300pA" not in set(a.condition):                   # older layout: DBS 300 pA in its own folder
+    old = RES / "image_c16_dbs300/analysis/summary.csv"
+    if "DBS 300pA" not in set(a.condition) and old.exists():  # older layout: DBS 300 pA in its own folder
+        b = pd.read_csv(old)
         a = pd.concat([a, b[b.condition == "DBS 300pA"]])
     return a[a.model == "local"]
 

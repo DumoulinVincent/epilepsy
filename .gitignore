@@ -41,3 +41,6 @@ manuscripts/
 epileptor/results/probe_work/
 *.bbl
 *.blg
+
+# generated figures (python figures/make_paper_figures.py)
+figures/out/
