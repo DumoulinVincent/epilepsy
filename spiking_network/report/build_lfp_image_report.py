@@ -382,6 +382,10 @@ but a fixed reader is miscalibrated: a possible therapeutic window between about
 \end{document}
 """
     (REPORT / f"{NAME}.tex").write_text(tex)
+    import shutil
+    if shutil.which("pdflatex") is None:
+        print(f"pdflatex not found: wrote {REPORT / (NAME + '.tex')} and the figures, PDF skipped")
+        return
     for _ in range(2):
         r = subprocess.run(["pdflatex", "-interaction=nonstopmode", f"{NAME}.tex"], cwd=REPORT,
                            capture_output=True, text=True)
